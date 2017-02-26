@@ -20,6 +20,9 @@ namespace ImageHandler
                 host.AddServiceEndpoint(typeof(Handler), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/imagehandler"));
                 host.Open();
 
+                Console.WriteLine();
+                Console.WriteLine("Enter to Exit");
+                Console.ReadKey();
             }
             catch (Exception)
             {
@@ -27,10 +30,6 @@ namespace ImageHandler
                 host.Close();
 
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Enter to Exit");
-            Console.ReadLine();
         }
     }
 }

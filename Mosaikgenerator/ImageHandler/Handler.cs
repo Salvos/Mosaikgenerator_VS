@@ -33,9 +33,9 @@ namespace ImageHandler
         /// <returns>Void</returns>
         public void cropRect(int imageId)
         {
+            printToConsole("Start cropping rect ...", ConsolePrintTypes.INFO);
             Images image = db.ImagesSet.Where(p => p.Id == imageId).First();
             int lowerSide = Math.Min(image.heigth, image.width);
-
             crop(imageId, lowerSide, lowerSide, CropModiTypes.MIDDLE);
         }
 
@@ -50,23 +50,30 @@ namespace ImageHandler
         public bool crop(int imageId, int width, int height, CropModiTypes mode)
         {
             printToConsole("Start cropping ...", ConsolePrintTypes.INFO);
-            // Log image
-            if (lockImage(imageId))
+
+            printToConsole("Cropping to " + width + "x" + height, ConsolePrintTypes.INFO);
+
+            try
             {
                 String imagePath = db.ImagesSet.Where(p => p.Id == imageId).First().path;
+                String imageFileName = db.ImagesSet.Where(p => p.Id == imageId).First().filename;
 
                 // Crop image on filesystem
                 Bitmap originalBitmap = openImage(imageId);
                 if (originalBitmap == null)
                 {
+                    printToConsole("Cropping faild!", ConsolePrintTypes.WARNING);
                     return false;
                 }
+
                 Bitmap newBitmap = new Bitmap(originalBitmap.Width, originalBitmap.Height);
 
                 int deltaWidth = originalBitmap.Width - width;
                 int deltaHeight = originalBitmap.Height - height;
                 int cropLeft = deltaWidth / 2;
                 int cropTop = deltaHeight / 2;
+
+                printToConsole("Cropmode: " + mode, ConsolePrintTypes.INFO);
 
                 switch (mode)
                 {
@@ -94,25 +101,89 @@ namespace ImageHandler
                 }
 
                 originalBitmap.Dispose();
-                newBitmap.Save(imagePath);
+                printToConsole("Save file to: " + IMAGEPATH + imagePath + imageFileName, ConsolePrintTypes.INFO);
+                newBitmap.Save(IMAGEPATH + imagePath + imageFileName);
+
+                // Set new values in database    
+                Images img = db.ImagesSet.Where(p => p.Id == imageId).First();
+                printToConsole("Set image width to: " + newBitmap.Width, ConsolePrintTypes.INFO);
+                img.width = newBitmap.Width;
+                printToConsole("Set image heigth to: " + newBitmap.Height, ConsolePrintTypes.INFO);
+                img.heigth = newBitmap.Height;
+                db.SaveChanges();
+
+                newBitmap.Dispose();
+
+                printToConsole("Image: " + img.path + "/" + img.filename + " croped successfully.", ConsolePrintTypes.INFO);
+                return true;
+            }
+            catch(Exception e)
+            {
+                printToConsole(e.ToString(), ConsolePrintTypes.WARNING);
+                printToConsole("Cropping faild!", ConsolePrintTypes.WARNING);
+                return false;
+            }       
+        }
+
+        /// <summary>
+        /// Skalliert ein Basismotiv auf eine gewünschte Größe 
+        /// </summary>
+        /// <param name="imageId">ID des Bildes in der Datenbank</param>
+        /// <param name="width">Breite des Bildes</param>
+        /// <param name="height">Höhe des Bildes (opt.)</param>
+        /// <returns>Erfolg oder misserfolg</returns>
+        public bool scale(int imageId, int width, int height = 0)
+        {
+            if (height == 0)
+                height = width;
+
+            printToConsole("Start scaling ...", ConsolePrintTypes.INFO);
+
+            printToConsole("Scaling to " + width + "x" + height, ConsolePrintTypes.INFO);
+
+            try
+            {
+                String imagePath = db.ImagesSet.Where(p => p.Id == imageId).First().path;
+                String imageFileName = db.ImagesSet.Where(p => p.Id == imageId).First().filename;
+
+                // Scale image on filesystem 
+                Bitmap originalBitmap = openImage(imageId);
+                if (originalBitmap == null)
+                {
+                    printToConsole("Scaling faild!", ConsolePrintTypes.WARNING);
+                    return false;
+                }
+
+                Bitmap newBitmap = new Bitmap(width, height);
+
+                Graphics grafic = Graphics.FromImage(newBitmap);
+                grafic.DrawImage(originalBitmap, new Rectangle(0, 0, width, height));
+
+                originalBitmap.Dispose();
+                grafic.Dispose();
+                printToConsole("Save image to:" + IMAGEPATH + imagePath + imageFileName, ConsolePrintTypes.INFO);
+                newBitmap.Save(IMAGEPATH + imagePath + imageFileName);
 
                 // Set new values in database
                 Images img = db.ImagesSet.Where(p => p.Id == imageId).First();
-                img.heigth = newBitmap.Height;
+                printToConsole("Set image width to: " + newBitmap.Width, ConsolePrintTypes.INFO);
                 img.width = newBitmap.Width;
+                printToConsole("Set image heigth to: " + newBitmap.Height, ConsolePrintTypes.INFO);
+                img.heigth = newBitmap.Height;
                 db.SaveChanges();
 
                 newBitmap.Dispose();
 
                 unlogImage(imageId);
 
-                printToConsole("Image: " + img.path + "/" + img.filename + " croped successfully.", ConsolePrintTypes.INFO);
                 return true;
             }
-
-            printToConsole("Cropping faild!", ConsolePrintTypes.WARNING);
-
-            return false;
+            catch(Exception e)
+            {
+                printToConsole(e.ToString(), ConsolePrintTypes.WARNING);
+                printToConsole("Scaling faild!", ConsolePrintTypes.WARNING);
+                return false;
+            }
         }
 
         /// <summary>
@@ -152,56 +223,6 @@ namespace ImageHandler
             bm.writelock = false;
 
             db.SaveChanges();
-        }
-
-        /// <summary>
-        /// Skalliert ein Basismotiv auf eine gewünschte Größe 
-        /// </summary>
-        /// <param name="imageId">ID des Bildes in der Datenbank</param>
-        /// <param name="width">Breite des Bildes</param>
-        /// <param name="height">Höhe des Bildes (opt.)</param>
-        /// <returns>Erfolg oder misserfolg</returns>
-        public bool scale(int imageId, int width, int height = 0)
-        {
-            if (height == 0)
-                height = width;
-
-            // Log image
-            if (lockImage(imageId))
-            {
-
-                String imagePath = db.ImagesSet.Where(p => p.Id == imageId).First().path;
-
-                // Scale image on filesystem 
-                Bitmap originalBitmap = openImage(imageId);
-                if (originalBitmap == null)
-                {
-                    return false;
-                }
-
-                Bitmap newBitmap = new Bitmap(width, height);
-
-                Graphics grafic = Graphics.FromImage(newBitmap);
-                grafic.DrawImage(originalBitmap, new Rectangle(0, 0, width, height));
-
-                originalBitmap.Dispose();
-                grafic.Dispose();
-                newBitmap.Save(imagePath);
-
-                // Set new values in database
-                Images img = db.ImagesSet.Where(p => p.Id == imageId).First();
-                img.heigth = newBitmap.Height;
-                img.width = newBitmap.Width;
-                db.SaveChanges();
-
-                newBitmap.Dispose();
-
-                unlogImage(imageId);
-
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
