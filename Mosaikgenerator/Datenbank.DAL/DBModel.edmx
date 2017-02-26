@@ -39,7 +39,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PoolsId" Type="int" Nullable="false" />
-    <Property Name="path" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="path" Type="nvarchar(max)" Nullable="false" DefaultValue="Motive\" />
     <Property Name="filename" Type="nvarchar(max)" Nullable="false" />
     <Property Name="displayname" Type="nvarchar(max)" Nullable="false" />
     <Property Name="width" Type="int" Nullable="false" />
@@ -133,7 +133,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Pools" Relationship="DBModel.PoolsImages" FromRole="Images" ToRole="Pools" />
           <Property Name="PoolsId" Type="Int32" Nullable="false" />
-          <Property Name="path" Type="String" Nullable="false" />
+          <Property Name="path" Type="String" Nullable="false" DefaultValue="Motive\" />
           <Property Name="filename" Type="String" Nullable="false" />
           <Property Name="displayname" Type="String" Nullable="false" />
           <Property Name="width" Type="Int32" Nullable="false" />
@@ -198,9 +198,6 @@
           <ScalarProperty Name="avgG" ColumnName="avgG" />
           <ScalarProperty Name="avgB" ColumnName="avgB" />
         </MappingFragment>
-              <MappingFragment StoreEntitySet="ImagesSet">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(DBModel.Motive)">
         <MappingFragment StoreEntitySet="ImagesSet_Motive">
@@ -208,9 +205,6 @@
           <ScalarProperty Name="readlock" ColumnName="readlock" />
           <ScalarProperty Name="writelock" ColumnName="writelock" />
         </MappingFragment>
-              <MappingFragment StoreEntitySet="ImagesSet">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
   </EntityContainerMapping>

@@ -14,6 +14,12 @@ namespace Datenbank.DAL
     
     public partial class Images
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Images()
+        {
+            this.path = "Motive\\";
+        }
+    
         public int Id { get; set; }
         public int PoolsId { get; set; }
         public string path { get; set; }
