@@ -17,21 +17,19 @@ namespace WebClient.Controllers
 
         public ActionResult Index()
         {
-            //var poolsSet = db.PoolsSet.Include(p => p.User);
-            //return View(poolsSet.ToList());
             return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Bildersammlungen()
         {
             var poolsSet = db.PoolsSet.Where(k => k.size == 0);
-            return View(poolsSet.ToList());
+            return View("Pool", poolsSet.ToList());
         }
 
         public ActionResult Kacheln()
         {
             var poolsSet = db.PoolsSet.Where(k => k.size != 0);
-            return View(poolsSet.ToList());
+            return View("Pool", poolsSet.ToList());
         }
 
         public PartialViewResult CreatePool(bool? isKachelPool)
@@ -48,7 +46,7 @@ namespace WebClient.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult CreatePool([Bind(Include = "Id,UserId,name,size,writelock")] Pools pools, bool? isKachelPool)
+        public PartialViewResult CreatePool([Bind(Include = "Id,owner,name,size,writelock")] Pools pools, bool? isKachelPool)
         {
             ViewBag.added = false;
             if (isKachelPool == null)
