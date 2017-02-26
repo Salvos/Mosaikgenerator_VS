@@ -26,6 +26,38 @@
 
 <hr />
 
+@{
+        if (ViewBag.isKachel)
+        {
+            Html.BeginForm(null, null, FormMethod.Post);
+            Html.AntiForgeryToken();
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="color" name="color" value="#ff0000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label for="nois">Rauschen</label>
+                            <input id="nois" type="checkbox" name="nois">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="number" min="1" max="20" step="1" name="value" placeholder="Anzahl">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <input type="submit" value="Erzeugen" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+        Html.EndForm();
+    }
+}
+
 <table class="table">
     <tr>
         <th>
@@ -38,13 +70,6 @@
             @Html.DisplayNameFor(model => model.heigth)
         </th>
         <th>
-            Bearbeiten
-        </th>
-        <th>
-            Download
-        </th>
-        <th>
-            Löschen
         </th>
     </tr>
 
@@ -60,19 +85,25 @@
             @Html.DisplayFor(modelItem => item.heigth)px
         </td>
         <td>
-            <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning">
+            <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Bearbeiten">
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
             </a>
-        </td>
-        <td>
-            <a href="@Url.Action("Download", "Images",  new { id = item.Id })" class="btn btn-warning">
+
+            <a href="@Url.Action("Download", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
                 <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
             </a>
-        </td>
-        <td>
-            <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning">
+
+            <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Löschen">
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </a>
+            @{
+                if (!ViewBag.isKachel)
+                {
+                    <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
+                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                    </a>
+                }
+            }
         </td>
     </tr>
 }

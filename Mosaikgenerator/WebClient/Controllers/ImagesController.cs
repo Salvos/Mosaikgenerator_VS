@@ -65,6 +65,11 @@ namespace WebClient.Controllers
             return View(images);
         }
 
+        public ActionResult Mosaik(int? id)
+        {
+            return View();
+        }
+
         // POST: Images/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -79,6 +79,7 @@ namespace WebClient.Controllers
             ViewBag.added = false;
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
             ViewBag.Poolname = pools.name;
+            ViewBag.isKachel = pools.size > 0;
 
             return View(imagesSet.ToList());
         }
