@@ -198,6 +198,9 @@
           <ScalarProperty Name="avgG" ColumnName="avgG" />
           <ScalarProperty Name="avgB" ColumnName="avgB" />
         </MappingFragment>
+              <MappingFragment StoreEntitySet="ImagesSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
       </EntityTypeMapping>
       <EntityTypeMapping TypeName="IsTypeOf(DBModel.Motive)">
         <MappingFragment StoreEntitySet="ImagesSet_Motive">
@@ -205,6 +208,9 @@
           <ScalarProperty Name="readlock" ColumnName="readlock" />
           <ScalarProperty Name="writelock" ColumnName="writelock" />
         </MappingFragment>
+              <MappingFragment StoreEntitySet="ImagesSet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
   </EntityContainerMapping>

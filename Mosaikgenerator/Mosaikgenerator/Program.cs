@@ -341,16 +341,17 @@ namespace Mosaikgenerator
         /// <param name="poolMotive"></param>
         /// <param name="poolKacheln"></param>
         /// <param name="poolMosaike"></param>
-        private static void preStorage(String username = "Demo", String poolMotive = "Basismotive", String poolKacheln = "Kacheln", String poolMosaike = "Mosaike")
+        private static void preStorage(String username = "Demo", String poolMotive = "Motive", String poolKacheln = "Kacheln", String poolMosaike = "Mosaike")
         {
             // Speichert drei Pools fuer den Nutzer
-            db.PoolsSet.Add(new Pools { name = "Basismotive", owner = username, size = 0, writelock = false });
+            db.PoolsSet.Add(new Pools { name = "Motive", owner = username, size = 0, writelock = false });
             db.PoolsSet.Add(new Pools { name = "Kacheln", owner = username, size = 10, writelock = false });
             db.PoolsSet.Add(new Pools { name = "Mosaike", owner = username, size = 0, writelock = false });
             db.SaveChanges();
 
-            db.Set<Motive>().Add(new Motive { path = "Basismotive\\", filename = "apple.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Apfel", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
-            db.Set<Motive>().Add(new Motive { path = "Basismotive\\", filename = "mario.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Mario", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
+            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "apple.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Apfel", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
+            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "mario.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Mario", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
+            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "pikachu.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Pikachu", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
 
             db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelA.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelA", heigth = 10, width = 10, hsv = "0", avgR = 237, avgG = 28, avgB = 36 });
             db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelB.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelB", heigth = 10, width = 10, hsv = "0", avgR = 0, avgG = 162, avgB = 231 });

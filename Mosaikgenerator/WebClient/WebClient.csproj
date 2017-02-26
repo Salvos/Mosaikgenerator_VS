@@ -197,6 +197,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PoolsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -268,11 +269,18 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Pools\Create.cshtml" />
+    <Content Include="Views\Pools\Bildersammlungen.cshtml" />
+    <Content Include="Views\Pools\CreatePool.cshtml" />
     <Content Include="Views\Pools\Delete.cshtml" />
     <Content Include="Views\Pools\Details.cshtml" />
     <Content Include="Views\Pools\Edit.cshtml" />
     <Content Include="Views\Pools\Index.cshtml" />
+    <Content Include="Views\Pools\Kacheln.cshtml" />
+    <Content Include="Views\Images\Delete.cshtml" />
+    <Content Include="Views\Images\Details.cshtml" />
+    <Content Include="Views\Images\Edit.cshtml" />
+    <Content Include="Views\Images\Index.cshtml" />
+    <Content Include="Views\Images\OLD_Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,50 +1,80 @@
-﻿@model Datenbank.DAL.Pools
+﻿@model IEnumerable<Datenbank.DAL.Images>
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
+</br>
 
-<div>
-    <h4>Pools</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "file", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                <input type="file" name="file" id="file" accept="image/jpeg, image/png" />
+            </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.owner)
-        </dt>
+            <div class="col-md-1">
+                <input type="submit" value="Hochladen" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.owner)
-        </dd>
+<hr />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.size)
-        </dt>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.displayname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.width)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.heigth)
+        </th>
+        <th>
+            Bearbeiten
+        </th>
+        <th>
+            Download
+        </th>
+        <th>
+            Löschen
+        </th>
+    </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.size)
-        </dd>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.displayname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.width)px
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.heigth)px
+        </td>
+        <td>
+            <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            </a>
+        </td>
+        <td>
+            <a href="@Url.Action("Download", "Images",  new { id = item.Id })" class="btn btn-warning">
+                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+            </a>
+        </td>
+        <td>
+            <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+        </td>
+    </tr>
+}
 
-        <dt>
-            @Html.DisplayNameFor(model => model.writelock)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.writelock)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</table>

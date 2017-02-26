@@ -4,54 +4,28 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Lösche: @Html.Raw(Model.name)</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Bist du dir sicher dass du die Sammlung löschen möchtest?</h3>
 <div>
-    <h4>Pools</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.owner)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.owner)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.size)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.size)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.writelock)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.writelock)
-        </dd>
-
-    </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-            @Html.Action("Add", "Pools", )
+            <input type="submit" value="Löschen" class="btn btn-default" />
+            @if (ViewBag.isKachelPool)
+                {
+                <a href="@Url.Action("Kacheln", "Pools")" class="btn btn-warning">
+                    Zurück zur Sammlung
+                </a>
+            }
+            else
+            {
+                <a href="@Url.Action("Bildersammlungen", "Pools")" class="btn btn-warning">
+                    Zurück zur Sammlung
+                </a>
+            }
         </div>
     }
 </div>
