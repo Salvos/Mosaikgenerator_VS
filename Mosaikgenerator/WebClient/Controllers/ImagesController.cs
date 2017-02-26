@@ -12,7 +12,7 @@ namespace WebClient.Controllers
 {
     public class ImagesController : Controller
     {
-        private MyModelContainer db = new MyModelContainer();
+        private DBModelContainer db = new DBModelContainer();
 
         public ActionResult Index()
         {
