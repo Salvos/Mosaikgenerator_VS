@@ -4,27 +4,173 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="DBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="DBModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="DBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DBModelStoreContainer">
+    <EntitySet Name="PoolsSet" EntityType="DBModel.Store.PoolsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ImagesSet" EntityType="DBModel.Store.ImagesSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ImagesSet_Kacheln" EntityType="DBModel.Store.ImagesSet_Kacheln" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="PoolsImages" Association="DBModel.Store.PoolsImages">
+      <End Role="Pools" EntitySet="PoolsSet" />
+      <End Role="Images" EntitySet="ImagesSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Kacheln_inherits_Images" Association="DBModel.Store.FK_Kacheln_inherits_Images">
+      <End Role="Images" EntitySet="ImagesSet" />
+      <End Role="Kacheln" EntitySet="ImagesSet_Kacheln" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="PoolsSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="owner" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="size" Type="int" Nullable="false" />
+    <Property Name="writelock" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ImagesSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PoolsId" Type="int" Nullable="false" />
+    <Property Name="path" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="filename" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="displayname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="width" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="heigth" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="hsv" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ImagesSet_Kacheln">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="avgR" Type="int" Nullable="false" />
+    <Property Name="avgG" Type="int" Nullable="false" />
+    <Property Name="avgB" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="PoolsImages">
+    <End Role="Pools" Type="DBModel.Store.PoolsSet" Multiplicity="1" />
+    <End Role="Images" Type="DBModel.Store.ImagesSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pools">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="PoolsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Kacheln_inherits_Images">
+    <End Role="Images" Type="DBModel.Store.ImagesSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Kacheln" Type="DBModel.Store.ImagesSet_Kacheln" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Kacheln">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="DBModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PoolsSet" EntityType="DBModel.Pools" />
+          <EntitySet Name="ImagesSet" EntityType="DBModel.Images" />
+          <AssociationSet Name="PoolsImages" Association="DBModel.PoolsImages">
+            <End Role="Pools" EntitySet="PoolsSet" />
+            <End Role="Images" EntitySet="ImagesSet" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Pools">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Images" Relationship="DBModel.PoolsImages" FromRole="Pools" ToRole="Images" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="owner" Type="String" Nullable="false" />
+          <Property Name="size" Type="Int32" Nullable="false" />
+          <Property Name="writelock" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Pools" Relationship="DBModel.PoolsImages" FromRole="Images" ToRole="Pools" />
+          <Property Name="PoolsId" Type="Int32" Nullable="false" />
+          <Property Name="path" Type="String" Nullable="false" />
+          <Property Name="filename" Type="String" Nullable="false" />
+          <Property Name="displayname" Type="String" Nullable="false" />
+          <Property Name="width" Type="String" Nullable="false" />
+          <Property Name="heigth" Type="String" Nullable="false" />
+          <Property Name="hsv" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="PoolsImages">
+          <End Type="DBModel.Pools" Role="Pools" Multiplicity="1" />
+          <End Type="DBModel.Images" Role="Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pools">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="PoolsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Kacheln" BaseType="DBModel.Images" >
+          <Property Name="avgR" Type="Int32" Nullable="false" />
+          <Property Name="avgG" Type="Int32" Nullable="false" />
+          <Property Name="avgB" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="DBModel" />
-        <Alias Key="Target" Value="DBModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="DBModelContainer" StorageEntityContainer="DBModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBModelContainer">
+    <EntitySetMapping Name="PoolsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.Pools)">
+        <MappingFragment StoreEntitySet="PoolsSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="owner" ColumnName="owner" />
+          <ScalarProperty Name="size" ColumnName="size" />
+          <ScalarProperty Name="writelock" ColumnName="writelock" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImagesSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.Images)">
+        <MappingFragment StoreEntitySet="ImagesSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PoolsId" ColumnName="PoolsId" />
+          <ScalarProperty Name="path" ColumnName="path" />
+          <ScalarProperty Name="filename" ColumnName="filename" />
+          <ScalarProperty Name="displayname" ColumnName="displayname" />
+          <ScalarProperty Name="width" ColumnName="width" />
+          <ScalarProperty Name="heigth" ColumnName="heigth" />
+          <ScalarProperty Name="hsv" ColumnName="hsv" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.Kacheln)">
+        <MappingFragment StoreEntitySet="ImagesSet_Kacheln">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="avgR" ColumnName="avgR" />
+          <ScalarProperty Name="avgG" ColumnName="avgG" />
+          <ScalarProperty Name="avgB" ColumnName="avgB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -38,6 +184,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
