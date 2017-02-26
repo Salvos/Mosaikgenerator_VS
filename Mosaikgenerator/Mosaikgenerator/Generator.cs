@@ -8,7 +8,7 @@ using Datenbank.DAL;
 
 namespace Mosaikgenerator
 {
-    class Program
+    class Generator
     {
         /*=====Konstanten=====*/
         // "Datenbankverbindung"
@@ -34,7 +34,8 @@ namespace Mosaikgenerator
         /// Main - Hier werden Testroutinen genutzt
         /// </summary>
         /// <param name="args">-/-</param>
-        static void Main(string[] args)
+        /*
+        static void Mainy(string[] args)
         {
             // DEBUGGING
             // Pre Initialisierung der Datenbank (Nur nach neuaufsetzen nutzbar)
@@ -56,7 +57,7 @@ namespace Mosaikgenerator
             Console.WriteLine();
             Console.WriteLine("Enter to Exit");
             Console.ReadLine();
-        }
+        }*/
 
         /*=====Weitere Funktionen=====*/
         /// <summary>
