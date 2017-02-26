@@ -5,10 +5,11 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using Datenbank.DAL;
+using Contracts;
 
 namespace Mosaikgenerator
 {
-    class Generator
+    class Generator:IMosaikGenerator
     {
         /*=====Konstanten=====*/
         // "Datenbankverbindung"
@@ -133,7 +134,7 @@ namespace Mosaikgenerator
         /// <param name="mosaikPoolID">Die ID des Mosaikpools (in dem das Bild gespeichert wird)</param>
         /// <param name="kachelnMultiUseEnabled">Sollen Kacheln mehrfach genutzt werden duerfen?</param>
         /// <param name="auswahlNBesteKacheln">Aus wievielen der besten Bilder soll ein zufaelliges ausgewaehlt werden?</param>
-        public static void mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1)
+        public void mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1)
         {
             // Pruefe ob alle wichtigen Parameter richtig gesetzt sind
             if (basisMotivID < 1 && kachelPoolID < 1 && mosaikPoolID < 1 && auswahlNBesteKacheln < 1)

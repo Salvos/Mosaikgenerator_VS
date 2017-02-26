@@ -19,15 +19,15 @@ namespace Mosaikgenerator
                 host.AddServiceEndpoint(typeof(Generator), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/mosaikgenerator"));
                 host.Open();
 
+                Console.WriteLine();
+                Console.WriteLine("Enter to Exit");
+                Console.ReadKey();
+
             }
             catch (Exception)
             {
                 host.Close();
             }
-
-            Console.WriteLine();
-            Console.WriteLine("Enter to Exit");
-            Console.ReadLine();
         }
     }
 }

@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{57a50b92-af47-48f4-9494-5b3c31f7c070}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Datenbank.DAL\Datenbank.DAL.csproj">
       <Project>{0096990e-6648-4038-8938-599aeb8a13d7}</Project>
       <Name>Datenbank.DAL</Name>

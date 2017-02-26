@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="IHandler.cs" />
     <Compile Include="IKachelGenerator.cs" />
+    <Compile Include="IMosaikGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
