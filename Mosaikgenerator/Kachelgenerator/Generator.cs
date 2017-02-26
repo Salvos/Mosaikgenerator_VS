@@ -17,6 +17,14 @@ namespace Kachelgenerator
         // Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
         private const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
 
+        // Mögliche Typen von Konsolenausgaben
+        private enum ConsolePrintTypes
+        {
+            WARNING,
+            ERROR,
+            INFO
+        }
+
         /// <summary>
         /// Erstellt eine Kachel
         /// </summary>
@@ -34,8 +42,10 @@ namespace Kachelgenerator
             int boul;
             int rand;
 
+            printToConsole("Find pool by Id: " + kachelPoolID, ConsolePrintTypes.INFO);
             Pools kachelPool = db.PoolsSet.Where(p => p.Id == kachelPoolID).First();
 
+            printToConsole("Kachelsize " + kachelPool.size + "x" + kachelPool.size, ConsolePrintTypes.INFO);
             int width = kachelPool.size;
             int height = kachelPool.size;
 
@@ -75,9 +85,11 @@ namespace Kachelgenerator
 
             // Generiere eine Einzigartige Bezeichnung
             String UUID = Guid.NewGuid().ToString();
+            printToConsole("gen UUID: " + UUID, ConsolePrintTypes.INFO);
 
             // Speichere das Bild ab
             bitmap.Save(IMAGEPATH + "Kacheln\\" + UUID + ".png");
+            printToConsole("Save image to: " + IMAGEPATH + "Kacheln\\" + UUID + ".png", ConsolePrintTypes.INFO);
 
             var kachel = db.Set<Kacheln>();
             kachel.Add(new Kacheln
@@ -96,8 +108,35 @@ namespace Kachelgenerator
 
             // Speichere die DB
             db.SaveChanges();
+            printToConsole("Generation done!", ConsolePrintTypes.INFO);
 
             bitmap.Dispose();
+        }
+
+        /// <summary>
+        /// Gibt einen Text formatiert in der Konsole aus
+        /// </summary>
+        /// <param name="printText">Der auszugebende Text</param>
+        /// <param name="errorType">Die Art der Konsolenausgabe (Error, Info, Warning...)</param>
+        private static void printToConsole(string printText, ConsolePrintTypes messageType)
+        {
+            if (1 == 1)
+            {
+                switch (messageType)
+                {
+                    case ConsolePrintTypes.INFO:
+                        Console.WriteLine("[INF] " + printText);
+                        break;
+
+                    case ConsolePrintTypes.ERROR:
+                        Console.WriteLine("[ERR] " + printText);
+                        break;
+
+                    case ConsolePrintTypes.WARNING:
+                        Console.WriteLine("[-!-] " + printText);
+                        break;
+                }
+            }
         }
 
         /// <summary>
@@ -108,6 +147,8 @@ namespace Kachelgenerator
         /// <returns>Durchschnittlicher farbwert</returns>
         private static int colorValue(Bitmap bitmap, ColorType type)
         {
+            printToConsole("Calculate RGB values", ConsolePrintTypes.INFO);
+
             int valueR = 0;
             int valueG = 0;
             int valueB = 0;
@@ -149,10 +190,12 @@ namespace Kachelgenerator
         {
             if (value > 255)
             {
+                printToConsole("Limiting " + value + " to 255" , ConsolePrintTypes.INFO);
                 value = 255;
             }
             if (value < 0)
             {
+                printToConsole("Limiting " + value + " to 0", ConsolePrintTypes.INFO);
                 value = 0;
             }
             return value;
