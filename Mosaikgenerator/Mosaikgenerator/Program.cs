@@ -38,7 +38,7 @@ namespace Mosaikgenerator
         {
             // DEBUGGING
             // Pre Initialisierung der Datenbank (Nur nach neuaufsetzen nutzbar)
-            //preStorage();
+            preStorage();
 
             // DEBUGGING
             // Testfunktionen fuer die Datenbank (nur zum lernen :) )
