@@ -10,6 +10,8 @@
         <AssociationConnector Association="DBModel.PoolsImages" />
         <EntityTypeShape EntityType="DBModel.Kacheln" Width="1.5" PointX="5.625" PointY="2.25" />
         <InheritanceConnector EntityType="DBModel.Kacheln" />
+        <EntityTypeShape EntityType="DBModel.Motive" Width="1.5" PointX="5.625" PointY="4" />
+        <InheritanceConnector EntityType="DBModel.Motive" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

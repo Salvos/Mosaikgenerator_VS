@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 02/26/2017 12:51:37
+-- Date Created: 02/26/2017 13:12:53
 -- Generated from EDMX file: D:\GitProjects\VS\Mosaikgenerator\Datenbank.DAL\DBModel.edmx
 -- --------------------------------------------------
 
@@ -20,6 +20,12 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_PoolsImages]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[ImagesSet] DROP CONSTRAINT [FK_PoolsImages];
 GO
+IF OBJECT_ID(N'[dbo].[FK_Kacheln_inherits_Images]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ImagesSet_Kacheln] DROP CONSTRAINT [FK_Kacheln_inherits_Images];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Motive_inherits_Images]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[ImagesSet_Motive] DROP CONSTRAINT [FK_Motive_inherits_Images];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -30,6 +36,12 @@ IF OBJECT_ID(N'[dbo].[PoolsSet]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[ImagesSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[ImagesSet];
+GO
+IF OBJECT_ID(N'[dbo].[ImagesSet_Kacheln]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ImagesSet_Kacheln];
+GO
+IF OBJECT_ID(N'[dbo].[ImagesSet_Motive]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ImagesSet_Motive];
 GO
 
 -- --------------------------------------------------
@@ -42,7 +54,7 @@ CREATE TABLE [dbo].[PoolsSet] (
     [name] nvarchar(max)  NOT NULL,
     [owner] nvarchar(max)  NOT NULL,
     [size] int  NOT NULL,
-    [writelock] nvarchar(max)  NOT NULL
+    [writelock] bit  NOT NULL
 );
 GO
 
@@ -53,8 +65,8 @@ CREATE TABLE [dbo].[ImagesSet] (
     [path] nvarchar(max)  NOT NULL,
     [filename] nvarchar(max)  NOT NULL,
     [displayname] nvarchar(max)  NOT NULL,
-    [width] nvarchar(max)  NOT NULL,
-    [heigth] nvarchar(max)  NOT NULL,
+    [width] int  NOT NULL,
+    [heigth] int  NOT NULL,
     [hsv] nvarchar(max)  NOT NULL
 );
 GO
@@ -64,6 +76,14 @@ CREATE TABLE [dbo].[ImagesSet_Kacheln] (
     [avgR] int  NOT NULL,
     [avgG] int  NOT NULL,
     [avgB] int  NOT NULL,
+    [Id] int  NOT NULL
+);
+GO
+
+-- Creating table 'ImagesSet_Motive'
+CREATE TABLE [dbo].[ImagesSet_Motive] (
+    [readlock] bit  NOT NULL,
+    [writelock] bit  NOT NULL,
     [Id] int  NOT NULL
 );
 GO
@@ -90,6 +110,12 @@ ADD CONSTRAINT [PK_ImagesSet_Kacheln]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
+-- Creating primary key on [Id] in table 'ImagesSet_Motive'
+ALTER TABLE [dbo].[ImagesSet_Motive]
+ADD CONSTRAINT [PK_ImagesSet_Motive]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
@@ -112,6 +138,15 @@ GO
 -- Creating foreign key on [Id] in table 'ImagesSet_Kacheln'
 ALTER TABLE [dbo].[ImagesSet_Kacheln]
 ADD CONSTRAINT [FK_Kacheln_inherits_Images]
+    FOREIGN KEY ([Id])
+    REFERENCES [dbo].[ImagesSet]
+        ([Id])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Id] in table 'ImagesSet_Motive'
+ALTER TABLE [dbo].[ImagesSet_Motive]
+ADD CONSTRAINT [FK_Motive_inherits_Images]
     FOREIGN KEY ([Id])
     REFERENCES [dbo].[ImagesSet]
         ([Id])

@@ -12,17 +12,9 @@ namespace Datenbank.DAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Images
+    public partial class Motive : Images
     {
-        public int Id { get; set; }
-        public int PoolsId { get; set; }
-        public string path { get; set; }
-        public string filename { get; set; }
-        public string displayname { get; set; }
-        public int width { get; set; }
-        public int heigth { get; set; }
-        public string hsv { get; set; }
-    
-        public virtual Pools Pools { get; set; }
+        public bool readlock { get; set; }
+        public bool writelock { get; set; }
     }
 }

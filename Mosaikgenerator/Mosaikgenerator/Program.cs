@@ -10,7 +10,6 @@ namespace Mosaikgenerator
 {
     class Program
     {
-
         /*=====Konstanten=====*/
         // "Datenbankverbindung"
         private static DBModelContainer db = new DBModelContainer();
@@ -350,14 +349,14 @@ namespace Mosaikgenerator
             db.PoolsSet.Add(new Pools { name = "Mosaike", owner = username, size = 0, writelock = false });
             db.SaveChanges();
 
-            db.Set<Basismotive>().Add(new Basismotive { path = "Basismotive\\", filename = "apple.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolMotive).First().Id, displayname = "Apfel", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
-            db.Set<Basismotive>().Add(new Basismotive { path = "Basismotive\\", filename = "mario.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolMotive).First().Id, displayname = "Mario", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
+            db.Set<Motive>().Add(new Motive { path = "Basismotive\\", filename = "apple.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Apfel", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
+            db.Set<Motive>().Add(new Motive { path = "Basismotive\\", filename = "mario.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Mario", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
 
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelA.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolKacheln).First().Id, displayname = "KachelA", heigth = 10, width = 10, hsv = "0", avgR = 237, avgG = 28, avgB = 36 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelB.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolKacheln).First().Id, displayname = "KachelB", heigth = 10, width = 10, hsv = "0", avgR = 0, avgG = 162, avgB = 231 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelC.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolKacheln).First().Id, displayname = "KachelC", heigth = 10, width = 10, hsv = "0", avgR = 255, avgG = 242, avgB = 0 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelD.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolKacheln).First().Id, displayname = "KachelD", heigth = 10, width = 10, hsv = "0", avgR = 181, avgG = 230, avgB = 29 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelE.png", PoolsId = db.PoolsSet.Where(p => p.User.username == username && p.name == poolKacheln).First().Id, displayname = "KachelE", heigth = 10, width = 10, hsv = "0", avgR = 163, avgG = 73, avgB = 164 });
+            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelA.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelA", heigth = 10, width = 10, hsv = "0", avgR = 237, avgG = 28, avgB = 36 });
+            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelB.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelB", heigth = 10, width = 10, hsv = "0", avgR = 0, avgG = 162, avgB = 231 });
+            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelC.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelC", heigth = 10, width = 10, hsv = "0", avgR = 255, avgG = 242, avgB = 0 });
+            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelD.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelD", heigth = 10, width = 10, hsv = "0", avgR = 181, avgG = 230, avgB = 29 });
+            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelE.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelE", heigth = 10, width = 10, hsv = "0", avgR = 163, avgG = 73, avgB = 164 });
 
             // Speichere die DB
             db.SaveChanges();

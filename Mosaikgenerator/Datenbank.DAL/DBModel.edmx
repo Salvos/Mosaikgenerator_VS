@@ -9,6 +9,7 @@
     <EntitySet Name="PoolsSet" EntityType="DBModel.Store.PoolsSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ImagesSet" EntityType="DBModel.Store.ImagesSet" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="ImagesSet_Kacheln" EntityType="DBModel.Store.ImagesSet_Kacheln" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ImagesSet_Motive" EntityType="DBModel.Store.ImagesSet_Motive" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="PoolsImages" Association="DBModel.Store.PoolsImages">
       <End Role="Pools" EntitySet="PoolsSet" />
       <End Role="Images" EntitySet="ImagesSet" />
@@ -16,6 +17,10 @@
     <AssociationSet Name="FK_Kacheln_inherits_Images" Association="DBModel.Store.FK_Kacheln_inherits_Images">
       <End Role="Images" EntitySet="ImagesSet" />
       <End Role="Kacheln" EntitySet="ImagesSet_Kacheln" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Motive_inherits_Images" Association="DBModel.Store.FK_Motive_inherits_Images">
+      <End Role="Images" EntitySet="ImagesSet" />
+      <End Role="Motive" EntitySet="ImagesSet_Motive" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="PoolsSet">
@@ -26,7 +31,7 @@
     <Property Name="name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="owner" Type="nvarchar(max)" Nullable="false" />
     <Property Name="size" Type="int" Nullable="false" />
-    <Property Name="writelock" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="writelock" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="ImagesSet">
     <Key>
@@ -37,8 +42,8 @@
     <Property Name="path" Type="nvarchar(max)" Nullable="false" />
     <Property Name="filename" Type="nvarchar(max)" Nullable="false" />
     <Property Name="displayname" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="width" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="heigth" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="width" Type="int" Nullable="false" />
+    <Property Name="heigth" Type="int" Nullable="false" />
     <Property Name="hsv" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <EntityType Name="ImagesSet_Kacheln">
@@ -48,6 +53,14 @@
     <Property Name="avgR" Type="int" Nullable="false" />
     <Property Name="avgG" Type="int" Nullable="false" />
     <Property Name="avgB" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ImagesSet_Motive">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="readlock" Type="bit" Nullable="false" />
+    <Property Name="writelock" Type="bit" Nullable="false" />
     <Property Name="Id" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="PoolsImages">
@@ -72,6 +85,20 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Kacheln">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Motive_inherits_Images">
+    <End Role="Images" Type="DBModel.Store.ImagesSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Motive" Type="DBModel.Store.ImagesSet_Motive" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Motive">
         <PropertyRef Name="Id" />
       </Dependent>
     </ReferentialConstraint>
@@ -109,8 +136,8 @@
           <Property Name="path" Type="String" Nullable="false" />
           <Property Name="filename" Type="String" Nullable="false" />
           <Property Name="displayname" Type="String" Nullable="false" />
-          <Property Name="width" Type="String" Nullable="false" />
-          <Property Name="heigth" Type="String" Nullable="false" />
+          <Property Name="width" Type="Int32" Nullable="false" />
+          <Property Name="heigth" Type="Int32" Nullable="false" />
           <Property Name="hsv" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="PoolsImages">
@@ -129,6 +156,10 @@
           <Property Name="avgR" Type="Int32" Nullable="false" />
           <Property Name="avgG" Type="Int32" Nullable="false" />
           <Property Name="avgB" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Motive" BaseType="DBModel.Images" >
+          <Property Name="readlock" Type="Boolean" Nullable="false" />
+          <Property Name="writelock" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -166,6 +197,13 @@
           <ScalarProperty Name="avgR" ColumnName="avgR" />
           <ScalarProperty Name="avgG" ColumnName="avgG" />
           <ScalarProperty Name="avgB" ColumnName="avgB" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.Motive)">
+        <MappingFragment StoreEntitySet="ImagesSet_Motive">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="readlock" ColumnName="readlock" />
+          <ScalarProperty Name="writelock" ColumnName="writelock" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
