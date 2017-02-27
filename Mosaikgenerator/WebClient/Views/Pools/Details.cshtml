@@ -27,7 +27,7 @@
 <hr />
 
 @{
-        if (ViewBag.isKachel)
+        if (ViewBag.isKachel) //<--------------
         {
             Html.BeginForm(null, null, FormMethod.Post);
             Html.AntiForgeryToken();

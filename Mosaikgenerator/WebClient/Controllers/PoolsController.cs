@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Datenbank.DAL;
 using System.Drawing;
+using System.ServiceModel;
+using Contracts;
 
 namespace WebClient.Controllers
 {
@@ -117,6 +119,40 @@ namespace WebClient.Controllers
                 if (fileExtPos >= 0)
                     dateiname = dateiname.Substring(0, fileExtPos);
 
+                if (pools.size == 0)
+                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
+                else
+                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0" });//, avgR = (int)red, avgG = (int)green, avgB = (int)blue });
+
+                db.SaveChanges();
+
+                bmp.Dispose();
+
+                // Croppen und Scalen wenn Bild eine Kachel ist
+                if (pools.size > 0)
+                {
+                    EndpointAddress endPoint = new EndpointAddress("http://localhost:8080/mosaikgenerator/imagehandler");
+                    ChannelFactory<IHandler> channelFactory = new ChannelFactory<IHandler>(new BasicHttpBinding(), endPoint);
+                    IHandler proxy = null;
+
+                    int imageId = db.ImagesSet.Where(p => p.filename == file.FileName).First().Id;
+
+                    try
+                    {
+                        proxy = channelFactory.CreateChannel();
+                        proxy.cropRect(imageId);
+                        proxy.scale(imageId, pools.size);
+                    }
+                    catch(Exception e)
+                    {
+                        channelFactory.Close();
+                        Console.WriteLine(e.ToString());
+                    }
+
+                    channelFactory.Close();
+                }
+
+                /*
                 double red = 0;
                 double green = 0;
                 double blue = 0;
@@ -134,13 +170,7 @@ namespace WebClient.Controllers
                 red = red / ges;
                 green = green / ges;
                 blue = blue / ges;
-
-                if (pools.size == 0)
-                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
-                else
-                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", avgR = (int)red, avgG = (int)green, avgB = (int)blue });
-
-                db.SaveChanges();
+                */
             }
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);

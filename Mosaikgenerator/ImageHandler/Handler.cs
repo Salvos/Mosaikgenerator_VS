@@ -104,17 +104,41 @@ namespace ImageHandler
                 printToConsole("Save file to: " + IMAGEPATH + imagePath + imageFileName, ConsolePrintTypes.INFO);
                 newBitmap.Save(IMAGEPATH + imagePath + imageFileName);
 
+                double red = 0;
+                double green = 0;
+                double blue = 0;
+                var ges = newBitmap.Width * newBitmap.Height;
+                for (int i = 0; i < newBitmap.Width; i++)
+                {
+                    for (int j = 0; j < newBitmap.Height; j++)
+                    {
+                        Color rgb = newBitmap.GetPixel(i, j);
+                        red += rgb.R;
+                        green += rgb.G;
+                        blue += rgb.B;
+                    }
+                }
+                red = red / ges;
+                green = green / ges;
+                blue = blue / ges;
+
                 // Set new values in database    
-                Images img = db.ImagesSet.Where(p => p.Id == imageId).First();
+                Kacheln img = db.ImagesSet.OfType<Kacheln>().Where(p => p.Id == imageId).First();
                 printToConsole("Set image width to: " + newBitmap.Width, ConsolePrintTypes.INFO);
                 img.width = newBitmap.Width;
                 printToConsole("Set image heigth to: " + newBitmap.Height, ConsolePrintTypes.INFO);
                 img.heigth = newBitmap.Height;
+                printToConsole("Set image avgR to: " + (int)red, ConsolePrintTypes.INFO);
+                img.avgR = (int)red;
+                printToConsole("Set image avgG to: " + (int)green, ConsolePrintTypes.INFO);
+                img.avgG = (int)green;
+                printToConsole("Set image avgB to: " + (int)blue, ConsolePrintTypes.INFO);
+                img.avgB = (int)blue;
                 db.SaveChanges();
 
                 newBitmap.Dispose();
 
-                printToConsole("Image: " + img.path + "/" + img.filename + " croped successfully.", ConsolePrintTypes.INFO);
+                printToConsole("Image: " + img.path + img.filename + " croped successfully.", ConsolePrintTypes.INFO);
                 return true;
             }
             catch(Exception e)
@@ -174,7 +198,7 @@ namespace ImageHandler
 
                 newBitmap.Dispose();
 
-                unlogImage(imageId);
+                printToConsole("Image: " + img.path + img.filename + " saling successfully.", ConsolePrintTypes.INFO);
 
                 return true;
             }

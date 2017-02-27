@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -17,7 +18,7 @@ namespace ImageHandler
             {
 
                 host = new ServiceHost(typeof(Handler));
-                host.AddServiceEndpoint(typeof(Handler), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/imagehandler"));
+                host.AddServiceEndpoint(typeof(IHandler), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/imagehandler"));
                 host.Open();
 
                 Console.WriteLine();
