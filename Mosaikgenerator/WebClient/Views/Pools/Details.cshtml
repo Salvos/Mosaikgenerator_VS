@@ -29,22 +29,23 @@
 @{
     if (ViewBag.isKachel)
     {
-        Html.BeginForm(null, null, FormMethod.Post);
+        Html.BeginForm("GenKacheln", null, new {  },  FormMethod.Post);
                 <div>
                     <div class="form-group">
                         <div class="col-md-3">
+                            <input type="hidden" name="id" value="@ViewBag.id" />
                             <input type="color" name="color" value="#ff0000">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-3">
                             <label for="nois">Rauschen</label>
-                            <input id="nois" type="checkbox" name="nois">
+                            <input id="nois" value="1" type="checkbox" name="nois">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-3">
-                            <input type="number" min="1" max="20" step="1" name="value" placeholder="Anzahl">
+                            <input type="number" min="1" max="20" step="1" name="count" placeholder="Anzahl">
                         </div>
                     </div>
                     <div class="form-group">

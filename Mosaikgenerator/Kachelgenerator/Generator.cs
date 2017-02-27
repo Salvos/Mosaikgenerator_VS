@@ -34,7 +34,7 @@ namespace Kachelgenerator
         /// <param name="b">Der Blau-Anteil der Kachelfarbe</param>
         /// <param name="nois">Es kann ein Rauschen der Farbwerte erzeugt werden</param>
         /// <returns>Void</returns>
-        public void genKachel(int kachelPoolID, int r, int g, int b, bool nois)
+        public void genKachel(int kachelPoolID, int r, int g, int b, bool nois=false)
         {
             int nr = r;
             int ng = g;
@@ -45,6 +45,8 @@ namespace Kachelgenerator
             printToConsole("Find pool by Id: " + kachelPoolID, ConsolePrintTypes.INFO);
             Pools kachelPool = db.PoolsSet.Where(p => p.Id == kachelPoolID).First();
 
+            printToConsole("R: " + r + "G: " + g + "B: " + b + "Nois: " + nois, ConsolePrintTypes.INFO);
+
             printToConsole("Kachelsize " + kachelPool.size + "x" + kachelPool.size, ConsolePrintTypes.INFO);
             int width = kachelPool.size;
             int height = kachelPool.size;
@@ -52,35 +54,41 @@ namespace Kachelgenerator
             Random random = new Random();
             Bitmap bitmap = new Bitmap(width, height);
 
-            for (int x = 1; x <= width; x++)
-            {
-                for (int y = 1; y <= height; y++)
+            try {
+                for (int x = 0; x < width; x++)
                 {
-                    if (nois)
+                    for (int y = 0; y < height; y++)
                     {
-                        boul = random.Next(0, 1);
-                        rand = random.Next(50, 70);
-
-                        if (boul == 1)
+                        if (nois)
                         {
-                            nr = r + rand;
-                            ng = g + rand;
-                            nb = b + rand;
-                        }
-                        else
-                        {
-                            nr = r - rand;
-                            ng = g - rand;
-                            nb = b - rand;
-                        }
+                            boul = random.Next(0, 1);
+                            rand = random.Next(50, 70);
 
-                        nr = minMax(nr);
-                        ng = minMax(ng);
-                        nb = minMax(nb);
+                            if (boul == 1)
+                            {
+                                nr = r + rand;
+                                ng = g + rand;
+                                nb = b + rand;
+                            }
+                            else
+                            {
+                                nr = r - rand;
+                                ng = g - rand;
+                                nb = b - rand;
+                            }
 
+                            nr = minMax(nr);
+                            ng = minMax(ng);
+                            nb = minMax(nb);
+
+                        }
+                        bitmap.SetPixel(x, y, Color.FromArgb(nr, ng, nb));
                     }
-                    bitmap.SetPixel(x, y, Color.FromArgb(nr, ng, nb));
                 }
+            }
+            catch(Exception e)
+            {
+                printToConsole(e.ToString(), ConsolePrintTypes.INFO);
             }
 
             // Generiere eine Einzigartige Bezeichnung
@@ -153,9 +161,9 @@ namespace Kachelgenerator
             int valueG = 0;
             int valueB = 0;
 
-            for (int x = 1; x <= bitmap.Width; x++)
+            for (int x = 0; x < bitmap.Width; x++)
             {
-                for (int y = 1; y <= bitmap.Height; y++)
+                for (int y = 0; y < bitmap.Height; y++)
                 {
                     Color c = bitmap.GetPixel(x, y);
                     valueR = +c.R;

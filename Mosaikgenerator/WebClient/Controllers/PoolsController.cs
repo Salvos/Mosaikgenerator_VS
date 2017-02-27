@@ -82,16 +82,17 @@ namespace WebClient.Controllers
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
             ViewBag.Poolname = pools.name;
             ViewBag.isKachel = pools.size > 0;
+            ViewBag.id = id;
 
             return View(imagesSet.ToList());
         }
 
-        [HttpPost, ActionName("GenKacheln")]
-        public ActionResult GenKacheln(int? id)
+        [HttpPost]
+        public ActionResult GenKacheln(int? id, string color, string count, string nois = "0")
         {
             if (id == null)
             {
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             Pools pools = db.PoolsSet.Find(id);
@@ -101,9 +102,12 @@ namespace WebClient.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.Poolname = pools.name;
+            Color newColor = ColorTranslator.FromHtml(color);
+
+            ViewBag.Poolname = newColor.R;//pools.name;
             ViewBag.isKachel = pools.size > 0;
-            /*
+            ViewBag.id = id;
+
             EndpointAddress endPoint = new EndpointAddress("http://localhost:8080/mosaikgenerator/kachelgenerator");
             ChannelFactory<IKachelGenerator> channelFactory = new ChannelFactory<IKachelGenerator>(new BasicHttpBinding(), endPoint);
             IKachelGenerator proxy = null;
@@ -111,9 +115,9 @@ namespace WebClient.Controllers
             try
             {
                 proxy = channelFactory.CreateChannel();
-                for(int i = 0; i < 0; i++)
+                for(int i = 0; i < int.Parse(count); i++)
                 {
-                    //proxy.genKachel(pools.Id, 0, 0, 0, nois);
+                    proxy.genKachel(pools.Id, newColor.R, newColor.G, newColor.B, nois=="1");
                 }
             }
             catch (Exception e)
@@ -123,10 +127,10 @@ namespace WebClient.Controllers
             }
 
             channelFactory.Close();
-            */
+            
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
 
-            return View(imagesSet.ToList());
+            return View("Details", imagesSet.ToList());
         }
 
         [HttpPost, ActionName("Details")]
@@ -147,6 +151,7 @@ namespace WebClient.Controllers
 
             ViewBag.Poolname = pools.name;
             ViewBag.isKachel = pools.size > 0;
+            ViewBag.id = id;
 
             if (file != null)
             {
