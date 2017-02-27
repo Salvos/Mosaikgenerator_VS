@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Datenbank.DAL;
+using System.ServiceModel;
+using Contracts;
 
 namespace WebClient.Controllers
 {
@@ -67,7 +69,17 @@ namespace WebClient.Controllers
 
         public ActionResult Mosaik(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.Basis = id;
+            ViewBag.Test = "test";
+
+            var poolsSet = db.PoolsSet;
+
+            return View(poolsSet.ToList());
         }
 
         // POST: Images/Delete/5
@@ -79,6 +91,39 @@ namespace WebClient.Controllers
             db.ImagesSet.Remove(images);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpPost, ActionName("Mosaik")]
+        [ValidateAntiForgeryToken]
+        public ActionResult GenMosaik(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.Basis = id;
+
+            EndpointAddress endPoin = new EndpointAddress("http://localhost:8080/mosaikgenerator/mosaikgenerator");
+            ChannelFactory<IMosaikGenerator> channelfactory = new ChannelFactory<IMosaikGenerator>(new BasicHttpBinding(), endPoin);
+            IMosaikGenerator proxy = null;
+
+            try
+            {
+                proxy = channelfactory.CreateChannel();
+
+                proxy.mosaikGenerator(0, 0, 0, true, 1);
+            }
+            catch(Exception)
+            {
+                channelfactory.Close();
+            }
+
+            channelfactory.Close();
+
+            var poolsSet = db.PoolsSet;
+
+            return View(poolsSet.ToList());
         }
 
         protected override void Dispose(bool disposing)

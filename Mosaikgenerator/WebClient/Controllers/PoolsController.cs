@@ -86,6 +86,49 @@ namespace WebClient.Controllers
             return View(imagesSet.ToList());
         }
 
+        [HttpPost, ActionName("GenKacheln")]
+        public ActionResult GenKacheln(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Pools pools = db.PoolsSet.Find(id);
+
+            if (pools == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.Poolname = pools.name;
+            ViewBag.isKachel = pools.size > 0;
+            /*
+            EndpointAddress endPoint = new EndpointAddress("http://localhost:8080/mosaikgenerator/kachelgenerator");
+            ChannelFactory<IKachelGenerator> channelFactory = new ChannelFactory<IKachelGenerator>(new BasicHttpBinding(), endPoint);
+            IKachelGenerator proxy = null;
+
+            try
+            {
+                proxy = channelFactory.CreateChannel();
+                for(int i = 0; i < 0; i++)
+                {
+                    //proxy.genKachel(pools.Id, 0, 0, 0, nois);
+                }
+            }
+            catch (Exception e)
+            {
+                channelFactory.Close();
+                Console.WriteLine(e.ToString());
+            }
+
+            channelFactory.Close();
+            */
+            var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
+
+            return View(imagesSet.ToList());
+        }
+
         [HttpPost, ActionName("Details")]
         [ValidateAntiForgeryToken]
         public ActionResult UploadImage(HttpPostedFileBase file, int? id)
@@ -103,6 +146,7 @@ namespace WebClient.Controllers
             }
 
             ViewBag.Poolname = pools.name;
+            ViewBag.isKachel = pools.size > 0;
 
             if (file != null)
             {
@@ -151,26 +195,6 @@ namespace WebClient.Controllers
 
                     channelFactory.Close();
                 }
-
-                /*
-                double red = 0;
-                double green = 0;
-                double blue = 0;
-                var ges = bmp.Width * bmp.Height;
-                for (int i = 0; i < bmp.Width; i++)
-                {
-                    for (int j = 0; j < bmp.Height; j++)
-                    {
-                        Color rgb = bmp.GetPixel(i, j);
-                        red += rgb.R;
-                        green += rgb.G;
-                        blue += rgb.B;
-                    }
-                }
-                red = red / ges;
-                green = green / ges;
-                blue = blue / ges;
-                */
             }
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
