@@ -95,15 +95,16 @@ namespace WebClient.Controllers
 
         [HttpPost, ActionName("Mosaik")]
         [ValidateAntiForgeryToken]
-        public ActionResult GenMosaik(int? id)
+        public ActionResult GenMosaik(int? id, String kachelPool, String mosaPool, String bestof = "1", String multi = "0")
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            ViewBag.Test = "Mosaik";
             ViewBag.Basis = id;
-
+            
             EndpointAddress endPoin = new EndpointAddress("http://localhost:8080/mosaikgenerator/mosaikgenerator");
             ChannelFactory<IMosaikGenerator> channelfactory = new ChannelFactory<IMosaikGenerator>(new BasicHttpBinding(), endPoin);
             IMosaikGenerator proxy = null;
@@ -112,7 +113,7 @@ namespace WebClient.Controllers
             {
                 proxy = channelfactory.CreateChannel();
 
-                proxy.mosaikGenerator(0, 0, 0, true, 1);
+                proxy.mosaikGenerator((int)id, int.Parse(kachelPool), int.Parse(mosaPool), multi == "1", int.Parse(bestof));
             }
             catch(Exception)
             {
@@ -121,9 +122,7 @@ namespace WebClient.Controllers
 
             channelfactory.Close();
 
-            var poolsSet = db.PoolsSet;
-
-            return View(poolsSet.ToList());
+            return Redirect("/Pools/Details/" + mosaPool);
         }
 
         protected override void Dispose(bool disposing)

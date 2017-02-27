@@ -319,10 +319,10 @@ namespace Mosaikgenerator
             String UUID = Guid.NewGuid().ToString();
 
             // Speichere das Bild ab
-            mosaik.Save(IMAGEPATH + "Mosaike\\" + UUID + ".png");
+            mosaik.Save(IMAGEPATH + "Motive\\" + UUID + ".png");
 
             var image = db.Set<Images>();
-            image.Add(new Images { displayname = "Mosaik", filename = UUID + ".png", path = "Mosaike\\", heigth = (basisMotiv.Size.Height * kachelPool.size), width = (basisMotiv.Size.Width * kachelPool.size), hsv = "000", PoolsId = mosaikPoolID });
+            image.Add(new Images { displayname = "Mosaik", filename = UUID + ".png", path = "Motive\\", heigth = (basisMotiv.Size.Height * kachelPool.size), width = (basisMotiv.Size.Width * kachelPool.size), hsv = "000", PoolsId = mosaikPoolID });
 
             // Mosaik fertig :)
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -16,7 +17,7 @@ namespace Mosaikgenerator
             try
             {
                 host = new ServiceHost(typeof(Generator));
-                host.AddServiceEndpoint(typeof(Generator), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/mosaikgenerator"));
+                host.AddServiceEndpoint(typeof(IMosaikGenerator), new BasicHttpBinding(), new Uri("http://localhost:8080/mosaikgenerator/mosaikgenerator"));
                 host.Open();
 
                 Console.WriteLine();
@@ -24,8 +25,9 @@ namespace Mosaikgenerator
                 Console.ReadKey();
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.ToString());
                 host.Close();
             }
         }
