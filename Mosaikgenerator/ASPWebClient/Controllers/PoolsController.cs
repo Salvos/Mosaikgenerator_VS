@@ -25,13 +25,13 @@ namespace ASPWebClient.Controllers
         public ActionResult Bildersammlungen()
         {
             var poolsSet = db.PoolsSet.Where(k => k.size == 0);
-            return View("Pool", poolsSet.ToList());
+            return View(poolsSet.ToList());
         }
 
         public ActionResult Kacheln()
         {
             var poolsSet = db.PoolsSet.Where(k => k.size != 0);
-            return View("Pool", poolsSet.ToList());
+            return View(poolsSet.ToList());
         }
 
         public PartialViewResult CreatePool(bool? isKachelPool)
