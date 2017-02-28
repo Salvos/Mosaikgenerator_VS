@@ -12,6 +12,7 @@ using Contracts;
 
 namespace ASPWebClient.Controllers
 {
+    [Authorize]
     public class ImagesController : Controller
     {
         private DBModelContainer db = new DBModelContainer();
