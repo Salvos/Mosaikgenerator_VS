@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{829C9AC9-3072-41A5-9526-D3C29A9CD184}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{57A50B92-AF47-48F4-9494-5B3C31F7C070}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datenbank.DAL", "Datenbank.DAL\Datenbank.DAL.csproj", "{0096990E-6648-4038-8938-599AEB8A13D7}"
@@ -15,16 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosaikgenerator", "Mosaikge
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kachelgenerator", "Kachelgenerator\Kachelgenerator.csproj", "{04D63273-2122-422B-82F8-A4077BF8B40A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPWebClient", "ASPWebClient\ASPWebClient.csproj", "{90C01863-E799-4836-8B1A-A91D0FD0797C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{829C9AC9-3072-41A5-9526-D3C29A9CD184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{829C9AC9-3072-41A5-9526-D3C29A9CD184}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{829C9AC9-3072-41A5-9526-D3C29A9CD184}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{829C9AC9-3072-41A5-9526-D3C29A9CD184}.Release|Any CPU.Build.0 = Release|Any CPU
 		{57A50B92-AF47-48F4-9494-5B3C31F7C070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{57A50B92-AF47-48F4-9494-5B3C31F7C070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57A50B92-AF47-48F4-9494-5B3C31F7C070}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{04D63273-2122-422B-82F8-A4077BF8B40A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04D63273-2122-422B-82F8-A4077BF8B40A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04D63273-2122-422B-82F8-A4077BF8B40A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C01863-E799-4836-8B1A-A91D0FD0797C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C01863-E799-4836-8B1A-A91D0FD0797C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C01863-E799-4836-8B1A-A91D0FD0797C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C01863-E799-4836-8B1A-A91D0FD0797C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,66 @@
+﻿@model Datenbank.DAL.Images
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Images</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.filename)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.filename)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.displayname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.displayname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.width)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.width)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.heigth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.heigth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.hsv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.hsv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pools.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pools.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

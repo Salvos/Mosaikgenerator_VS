@@ -1,0 +1,65 @@
+﻿@model Datenbank.DAL.Pools
+
+@{
+    ViewBag.Title = "CreatePool";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.Hidden("owner", "Tim")
+        @Html.Hidden("writelock", false)
+
+        <div class="form-group">
+            <div class="col-md-3">
+                @if(ViewBag.isKachelPool)
+                {
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Kachelsammlung" } })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Bildersammlung" } })
+                }
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+
+            @if (ViewBag.isKachelPool)
+            {
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.size, new { htmlAttributes = new { @class = "form-control", @min="10", @max="40", @placeholder = "Größe der Kacheln" } })
+                @Html.ValidationMessageFor(model => model.size, "", new { @class = "text-danger" })
+            </div>
+            }
+
+            <div class="col-md-1">
+                <input type="submit" value="Erstellen" class="btn btn-default" />
+            </div>
+
+            @if(ViewBag.added) {
+            <div class="col-md-3">
+                @if (ViewBag.isKachelPool)
+                {
+                    <a href="@Url.Action("Kacheln", "Pools", null)" class="btn btn-warning">
+                        Erfolgreich erstellt - Neu laden 
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Bildersammlungen", "Pools", null)" class="btn btn-warning">
+                        Erfolgreich erstellt - Neu laden
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </a>
+                }
+            </div>
+            }
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

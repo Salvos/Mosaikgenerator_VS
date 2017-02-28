@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Datenbank.DAL.Images>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
+</br>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "file", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                <input type="file" name="file" id="file" accept="image/jpeg, image/png" />
+            </div>
+
+            <div class="col-md-1">
+                <input type="submit" value="Hochladen" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<hr />
+
+@{
+    if (ViewBag.isKachel)
+    {
+        Html.BeginForm("GenKacheln", null, new {  },  FormMethod.Post);
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="hidden" name="id" value="@ViewBag.id" />
+                            <input type="color" name="color" value="#ff0000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label for="nois">Rauschen</label>
+                            <input id="nois" value="1" type="checkbox" name="nois">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <input type="number" min="1" max="20" step="1" name="count" placeholder="Anzahl">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <input type="submit" value="Erzeugen" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+        Html.EndForm();
+    }
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.displayname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.width)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.heigth)
+        </th>
+        <th>
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.displayname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.width)px
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.heigth)px
+        </td>
+        <td>
+            <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Bearbeiten">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            </a>
+
+            <a href="@Url.Action("Download", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
+                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+            </a>
+
+            <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Löschen">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
+            @{
+                if (!ViewBag.isKachel)
+                {
+                    <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
+                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                    </a>
+                }
+            }
+        </td>
+    </tr>
+}
+
+</table>
