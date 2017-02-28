@@ -20,8 +20,10 @@
                 </button>
                 @Html.ActionLink("Mosaikgenerator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            @Html.Partial("_NavigationPartial")
-            @Html.Partial("_LoginPartial")
+            <div class="navbar-collapse collapse">
+                @Html.Partial("_NavigationPartial")
+                @Html.Partial("_LoginPartial")
+            </div>
         </div>
     </div>
     <div class="container body-content">

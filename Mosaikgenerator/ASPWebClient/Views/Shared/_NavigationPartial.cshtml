@@ -1,12 +1,10 @@
 ﻿@using Microsoft.AspNet.Identity
 @if (Request.IsAuthenticated)
 {
-    <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
             <li>@Html.ActionLink("Bildersammlungen", "Bildersammlungen", "Pools")</li>
             <li>@Html.ActionLink("Kachelsammlungen", "Kacheln", "Pools")</li>
         </ul>
-    </div>
 }
 
 
