@@ -63,6 +63,8 @@ namespace ASPWebClient.Controllers
         public ActionResult PoolsList(bool? isKachelPool)
         {
             var user = User.Identity.Name;
+            ViewBag.isKachelPool = isKachelPool;
+
             IQueryable<Pools> poolsSet;
 
             if ((bool)isKachelPool)
@@ -73,8 +75,6 @@ namespace ASPWebClient.Controllers
             {
                 poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == user);
             }
-
-            ViewBag.isKachelPool = isKachelPool;
 
             return PartialView(poolsSet.ToList());
         }
@@ -282,6 +282,12 @@ namespace ASPWebClient.Controllers
             if (pools.size == 0)
                 return RedirectToAction("Bildersammlungen");
             return RedirectToAction("Kacheln");
+        }
+
+        public ActionResult PoolCount(int id)
+        {
+            int imageCount = db.ImagesSet.Where(o => o.PoolsId == id).Count();
+            return PartialView(imageCount);
         }
 
         protected override void Dispose(bool disposing)

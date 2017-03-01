@@ -41,7 +41,7 @@
             }
        }
             <td>
-                0
+                @{Html.RenderAction("PoolCount", "Pools", new { id = item.Id });}
             </td>
             <td>
                 <a href="@Url.Action("Edit", "Pools",  new { id = item.Id })" class="btn btn-warning">
