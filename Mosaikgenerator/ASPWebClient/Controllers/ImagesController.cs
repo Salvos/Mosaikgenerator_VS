@@ -77,8 +77,8 @@ namespace ASPWebClient.Controllers
 
             ViewBag.Basis = id;
             ViewBag.Test = "test";
-
-            var poolsSet = db.PoolsSet;
+            var user = User.Identity.Name;
+            var poolsSet = db.PoolsSet.Where(p => p.owner == user);
 
             return View(poolsSet.ToList());
         }
@@ -98,7 +98,7 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult GenMosaik(int? id, String kachelPool, String mosaPool, String bestof = "1", String multi = "0")
         {
-            if (id == null)
+            if (id == null && kachelPool == "" && mosaPool == "")
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }

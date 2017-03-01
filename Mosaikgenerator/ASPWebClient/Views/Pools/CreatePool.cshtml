@@ -9,7 +9,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        @Html.Hidden("owner", "Tim")
+        @Html.Hidden("owner", Session["User"])
         @Html.Hidden("writelock", false)
 
         <div class="form-group">

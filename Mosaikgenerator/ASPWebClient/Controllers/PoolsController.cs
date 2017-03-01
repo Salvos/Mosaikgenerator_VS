@@ -25,13 +25,15 @@ namespace ASPWebClient.Controllers
 
         public ActionResult Bildersammlungen()
         {
-            var poolsSet = db.PoolsSet.Where(k => k.size == 0);
+            var user = User.Identity.Name;
+            var poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == user);
             return View(poolsSet.ToList());
         }
 
         public ActionResult Kacheln()
         {
-            var poolsSet = db.PoolsSet.Where(k => k.size != 0);
+            var user = User.Identity.Name;
+            var poolsSet = db.PoolsSet.Where(k => k.size != 0).Where(p => p.owner == user);
             return View(poolsSet.ToList());
         }
 
@@ -158,7 +160,7 @@ namespace ASPWebClient.Controllers
             {
                 String folder = "Kacheln";
                 if (pools.size == 0)
-                    folder = "Basismotive";
+                    folder = "Motive";
 
                 file.SaveAs("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + file.FileName);
 
@@ -170,9 +172,9 @@ namespace ASPWebClient.Controllers
                     dateiname = dateiname.Substring(0, fileExtPos);
 
                 if (pools.size == 0)
-                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
+                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = file.FileName, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
                 else
-                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = file.FileName, PoolsId = db.PoolsSet.Where(p => p.owner == "Demo" && p.name == folder).First().Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0" });//, avgR = (int)red, avgG = (int)green, avgB = (int)blue });
+                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = file.FileName, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0" });//, avgR = (int)red, avgG = (int)green, avgB = (int)blue });
 
                 db.SaveChanges();
 
