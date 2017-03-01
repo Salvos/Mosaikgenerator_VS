@@ -17,10 +17,12 @@ namespace ASPWebClient.Controllers
     {
         private DBModelContainer db = new DBModelContainer();
 
+        // DEBUGGING
+        // Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
+        private const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
+
         public ActionResult Index()
         {
-            //var imagesSet = db.ImagesSet.Include(i => i.Pools);
-            //return View(imagesSet.ToList());
             return RedirectToAction("Index", "Home");
         }
 
@@ -54,6 +56,20 @@ namespace ASPWebClient.Controllers
             return View(images);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "Id,PoolsId,path,filename,displayname,width,heigth,hsv")] Images images)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(images).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", "Pools", new { id = images.PoolsId });
+            }
+            ViewBag.PoolsId = new SelectList(db.PoolsSet, "Id", "name", images.PoolsId);
+            return View(images);
+        }
+
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -68,6 +84,26 @@ namespace ASPWebClient.Controllers
             return View(images);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Images images = db.ImagesSet.Find(id);
+            Pools thisPool = db.PoolsSet.Find(images.PoolsId);
+            if(!thisPool.writelock)
+            {
+                // Speichere die Änderungen in der Datenbank
+                db.ImagesSet.Remove(images);
+                db.SaveChanges();
+
+                // Entferne das Bild im FileSystem
+                System.IO.File.Delete(IMAGEPATH+images.path+images.filename);
+
+                return RedirectToAction("Details", "Pools", new { id = images.PoolsId });
+            }
+            return RedirectToAction("Delete", "Pools", new { id = images.PoolsId });
+        }
+
         public ActionResult Mosaik(int? id)
         {
             if (id == null)
@@ -76,22 +112,9 @@ namespace ASPWebClient.Controllers
             }
 
             ViewBag.Basis = id;
-            ViewBag.Test = "test";
-            var user = User.Identity.Name;
-            var poolsSet = db.PoolsSet.Where(p => p.owner == user);
+            var poolsSet = db.PoolsSet.Where(p => p.owner == User.Identity.Name);
 
             return View(poolsSet.ToList());
-        }
-
-        // POST: Images/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Images images = db.ImagesSet.Find(id);
-            db.ImagesSet.Remove(images);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         [HttpPost, ActionName("Mosaik")]
@@ -103,7 +126,6 @@ namespace ASPWebClient.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.Test = "Mosaik";
             ViewBag.Basis = id;
 
             EndpointAddress endPoin = new EndpointAddress("http://localhost:8080/mosaikgenerator/mosaikgenerator");
@@ -123,7 +145,7 @@ namespace ASPWebClient.Controllers
 
             channelfactory.Close();
 
-            return Redirect("/Pools/Details/" + mosaPool);
+            return RedirectToAction("Details", "Pools", new { id = mosaPool });
         }
 
         protected override void Dispose(bool disposing)
@@ -134,114 +156,5 @@ namespace ASPWebClient.Controllers
             }
             base.Dispose(disposing);
         }
-
-
-
-
-
-        /*
-
-
-
-        // GET: Images/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Images images = db.ImagesSet.Find(id);
-            if (images == null)
-            {
-                return HttpNotFound();
-            }
-            return View(images);
-        }
-
-        // GET: Images/Create
-        public ActionResult Create()
-        {
-            ViewBag.PoolsId = new SelectList(db.PoolsSet, "Id", "name");
-            return View();
-        }
-
-        // POST: Images/Create
-        // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
-        // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,PoolsId,path,filename,displayname,width,heigth,hsv")] Images images)
-        {
-            if (ModelState.IsValid)
-            {
-                db.ImagesSet.Add(images);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.PoolsId = new SelectList(db.PoolsSet, "Id", "name", images.PoolsId);
-            return View(images);
-        }
-
-        // GET: Images/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Images images = db.ImagesSet.Find(id);
-            if (images == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.PoolsId = new SelectList(db.PoolsSet, "Id", "name", images.PoolsId);
-            return View(images);
-        }
-
-        // POST: Images/Edit/5
-        // Aktivieren Sie zum Schutz vor übermäßigem Senden von Angriffen die spezifischen Eigenschaften, mit denen eine Bindung erfolgen soll. Weitere Informationen 
-        // finden Sie unter http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,PoolsId,path,filename,displayname,width,heigth,hsv")] Images images)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(images).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.PoolsId = new SelectList(db.PoolsSet, "Id", "name", images.PoolsId);
-            return View(images);
-        }
-
-        // GET: Images/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Images images = db.ImagesSet.Find(id);
-            if (images == null)
-            {
-                return HttpNotFound();
-            }
-            return View(images);
-        }
-
-        // POST: Images/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Images images = db.ImagesSet.Find(id);
-            db.ImagesSet.Remove(images);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-    */
     }
 }

@@ -16,6 +16,7 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.PoolsId)
         @Html.HiddenFor(model => model.path)
         @Html.HiddenFor(model => model.filename)
         @Html.HiddenFor(model => model.width)
