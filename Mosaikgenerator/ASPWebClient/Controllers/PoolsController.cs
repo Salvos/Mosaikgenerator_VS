@@ -142,7 +142,7 @@ namespace ASPWebClient.Controllers
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
 
-            return View("Details", imagesSet.ToList());
+            return RedirectToAction("Details", imagesSet.ToList());
         }
 
         [HttpPost, ActionName("Details")]
