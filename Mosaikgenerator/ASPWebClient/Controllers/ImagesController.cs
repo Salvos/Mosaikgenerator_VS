@@ -233,6 +233,30 @@ namespace ASPWebClient.Controllers
         }
 
         /// <summary>
+        /// Erstellen eines Mosaikbildes
+        /// Wurde das Bild nicht gefunden / ist nicht das eigene wird ein 404 ausgegeben
+        /// </summary>
+        /// <param name="id">Id des Bildes</param>
+        /// <param name="kachelPool">Id des Kachelpools</param>
+        /// <param name="mosaPool">Id der Speichersammlung</param>
+        /// <param name="bestof">Auswahl aus wievielen Bildern</param>
+        /// <param name="multi">Kacheln mehrfach verwenden?</param>
+        /// <returns>BadRequest</returns>
+
+        public ActionResult Download(int? id, bool isKachel)
+        {
+            Images image = db.ImagesSet.Where(p => p.Id == id).First();
+
+            String folder = "Kacheln";
+            if (!isKachel)
+                folder = "Motive";
+
+            byte[] fileBytes = System.IO.File.ReadAllBytes("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + image.filename);
+
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, image.filename);
+        }
+
+        /// <summary>
         /// Schon vorhandene Funktion zum "entsorgen" der Datenbankverbindung
         /// </summary>
         /// <param name="disposing">Trennen der Datenbankverbindung</param>

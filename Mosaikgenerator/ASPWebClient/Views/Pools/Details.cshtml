@@ -95,7 +95,7 @@
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
             </a>
 
-            <a href="@Url.Action("Download", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
+            <a href="@Url.Action("Download", "Images",  new { id = item.Id, isKachel = ViewBag.isKachel })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
                 <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
             </a>
 
