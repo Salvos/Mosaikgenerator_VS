@@ -7,7 +7,7 @@
 <h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
 </br>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Details", "Pools", FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
