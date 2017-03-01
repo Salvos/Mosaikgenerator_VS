@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Datenbank.DAL.Pools>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.name)
+        </th>
+        @{ 
+            if (ViewBag.isKachelPool) {
+        <th>
+            @Html.DisplayNameFor(model => model.size)
+        </th>
+                }
+            }
+        <th>
+            Bilder
+        </th>
+        <th>
+            Bearbeiten
+        </th>
+        <th>
+            Öffnen
+        </th>
+        <th>
+            Löschen
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+        @{
+            if (ViewBag.isKachelPool)
+            {
+            <td>
+                @Html.DisplayFor(modelItem => item.size)
+            </td>
+            }
+       }
+            <td>
+                0
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "Pools",  new { id = item.Id })" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Details", "Pools",  new { id = item.Id })" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                </a>
+            </td>
+            <td>
+                <a href="@Url.Action("Delete", "Pools",  new { id = item.Id })" class="btn btn-warning">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+            </td>
+        </tr>
+    }
+
+</table>

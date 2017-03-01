@@ -1,63 +1,38 @@
-﻿@model IEnumerable<Datenbank.DAL.Pools>
-
-@{
-    ViewBag.Title = "Bildersammlungen";
-}
+﻿@model Datenbank.DAL.Pools
 
 <h2>Kachelsammlungen</h2>
 </br>
-@{Html.RenderAction("CreatePool", new { isKachelPool = true });}
-<hr />
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.size)
-        </th>
-        <th>
-            Bilder
-        </th>
-        <th>
-            Bearbeiten
-        </th>
-        <th>
-            Öffnen
-        </th>
-        <th>
-            Löschen
-        </th>
-    </tr>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.size)
-        </td>
-        <td>
-            0
-        </td>
-        <td>
-            <a href="@Url.Action("Edit", "Pools",  new { id = item.Id })" class="btn btn-warning">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            </a>
-        </td>
-        <td>
-            <a href="@Url.Action("Details", "Pools",  new { id = item.Id })" class="btn btn-warning">
-                <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-            </a>
-        </td>
-        <td>
-            <a href="@Url.Action("Delete", "Pools",  new { id = item.Id })" class="btn btn-warning">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </a>
-        </td>
-    </tr>
+    <div class="form-horizontal">
+        @Html.Hidden("owner", User.Identity.Name)
+        @Html.Hidden("writelock", false)
+
+        <div class="form-group">
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Kachelsammlung", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.size, new { htmlAttributes = new { @class = "form-control", @min = "10", @max = "40", @step = "1", @placeholder = "Größe der Kacheln" } })
+                @Html.ValidationMessageFor(model => model.size, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-1">
+                <input type="submit" value="Erstellen" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
 
-</table>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<hr />
+
+@{Html.RenderAction("PoolsList", "Pools", new { isKachelPool = true });}
