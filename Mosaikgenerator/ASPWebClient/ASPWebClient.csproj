@@ -275,7 +275,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Pools\Bildersammlungen.cshtml" />
-    <Content Include="Views\Pools\CreatePool.cshtml" />
+    <Content Include="Views\Pools\PoolsList.cshtml" />
     <Content Include="Views\Pools\Delete.cshtml" />
     <Content Include="Views\Pools\Details.cshtml" />
     <Content Include="Views\Pools\Edit.cshtml" />

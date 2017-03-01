@@ -26,49 +26,57 @@ namespace ASPWebClient.Controllers
 
         public ActionResult Bildersammlungen()
         {
-            var user = User.Identity.Name;
-            var poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == user);
-            return View(poolsSet.ToList());
-        }
-
-        public ActionResult Kacheln()
-        {
-            var user = User.Identity.Name;
-            var poolsSet = db.PoolsSet.Where(k => k.size != 0).Where(p => p.owner == user);
-            return View(poolsSet.ToList());
-        }
-
-        public PartialViewResult CreatePool(bool? isKachelPool)
-        {
-            if (isKachelPool == null)
-            {
-                isKachelPool = false;
-            }
-
-            ViewBag.isKachelPool = isKachelPool;
-            ViewBag.added = false;
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public PartialViewResult CreatePool([Bind(Include = "Id,owner,name,size,writelock")] Pools pools, bool? isKachelPool)
+        public ActionResult Bildersammlungen([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
         {
-            ViewBag.added = false;
-            if (isKachelPool == null)
-            {
-                isKachelPool = false;
-            }
-
-            ViewBag.isKachelPool = isKachelPool;
             if (ModelState.IsValid)
             {
                 db.PoolsSet.Add(pools);
                 db.SaveChanges();
-                ViewBag.added = true;
-                return PartialView();
             }
-            return PartialView();
+
+            return RedirectToAction("Bildersammlungen");
+        }
+
+        public ActionResult Kacheln()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Kacheln([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
+        {
+            if (ModelState.IsValid)
+            {
+                db.PoolsSet.Add(pools);
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Kacheln");
+        }
+
+        public ActionResult PoolsList(bool? isKachelPool)
+        {
+            var user = User.Identity.Name;
+            IQueryable<Pools> poolsSet;
+
+            if ((bool)isKachelPool)
+            {
+                poolsSet = db.PoolsSet.Where(k => k.size != 0).Where(p => p.owner == user);
+            }
+            else
+            {
+                poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == user);
+            }
+
+            ViewBag.isKachelPool = isKachelPool;
+
+            return PartialView(poolsSet.ToList());
         }
 
         public ActionResult Details(int? id)
