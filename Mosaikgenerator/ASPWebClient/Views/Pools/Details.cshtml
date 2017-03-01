@@ -7,14 +7,14 @@
 <h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
 </br>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "file", enctype = "multipart/form-data" }))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <div class="form-group">
             <div class="col-md-3">
-                <input type="file" name="file" id="file" accept="image/jpeg, image/png" />
+                <input type="file" name="files" id="file" multiple accept="image/jpeg, image/png" />
             </div>
 
             <div class="col-md-1">

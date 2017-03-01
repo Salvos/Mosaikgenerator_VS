@@ -146,7 +146,7 @@ namespace ASPWebClient.Controllers
 
         [HttpPost, ActionName("Details")]
         [ValidateAntiForgeryToken]
-        public ActionResult UploadImage(HttpPostedFileBase file, int? id)
+        public ActionResult UploadImage(IEnumerable<HttpPostedFileBase> files, int? id)
         {
             if (id == null)
             {
@@ -164,15 +164,20 @@ namespace ASPWebClient.Controllers
             ViewBag.isKachel = pools.size > 0;
             ViewBag.id = id;
 
-            if (file != null)
+
+            foreach (var file in files)
             {
                 String folder = "Kacheln";
                 if (pools.size == 0)
                     folder = "Motive";
 
-                file.SaveAs("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + file.FileName);
+                String UUID = Guid.NewGuid().ToString();
+                String extention = System.IO.Path.GetExtension(file.FileName);
+                string filename = UUID + extention;
 
-                Bitmap bmp = new Bitmap("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + file.FileName);
+                file.SaveAs("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + filename);
+
+                Bitmap bmp = new Bitmap("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + filename);
 
                 String dateiname = file.FileName;
                 int fileExtPos = dateiname.LastIndexOf(".");
@@ -180,9 +185,9 @@ namespace ASPWebClient.Controllers
                     dateiname = dateiname.Substring(0, fileExtPos);
 
                 if (pools.size == 0)
-                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = file.FileName, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
+                    db.Set<Motive>().Add(new Motive { path = folder + "\\", filename = filename, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0", readlock = false, writelock = false });
                 else
-                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = file.FileName, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0" });//, avgR = (int)red, avgG = (int)green, avgB = (int)blue });
+                    db.Set<Kacheln>().Add(new Kacheln { path = folder + "\\", filename = filename, PoolsId = pools.Id, displayname = dateiname, heigth = bmp.Height, width = bmp.Width, hsv = "0" });//, avgR = (int)red, avgG = (int)green, avgB = (int)blue });
 
                 db.SaveChanges();
 
@@ -195,7 +200,7 @@ namespace ASPWebClient.Controllers
                     ChannelFactory<IHandler> channelFactory = new ChannelFactory<IHandler>(new BasicHttpBinding(), endPoint);
                     IHandler proxy = null;
 
-                    int imageId = db.ImagesSet.Where(p => p.filename == file.FileName).First().Id;
+                    int imageId = db.ImagesSet.Where(p => p.filename == filename).First().Id;
 
                     try
                     {
