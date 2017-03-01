@@ -10,7 +10,6 @@
     @Html.AntiForgeryToken()
         
         <div class="form-group">
-            <input type="hidden" name="basis" value="@Html.Raw(ViewBag.Basis)" />
                 <label for="kachelPool">Kachelpool wählen:</label>
                 <select class="form-control" id="kachelPool" name="kachelPool">
             @foreach (var item in Model)

@@ -16,6 +16,7 @@ namespace ASPWebClient.Controllers
     [Authorize]
     public class PoolsController : Controller
     {
+
         private DBModelContainer db = new DBModelContainer();
 
         public ActionResult Index()
