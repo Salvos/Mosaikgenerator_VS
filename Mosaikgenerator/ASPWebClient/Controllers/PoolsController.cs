@@ -116,7 +116,7 @@ namespace ASPWebClient.Controllers
 
             Color newColor = ColorTranslator.FromHtml(color);
 
-            ViewBag.Poolname = newColor.R;//pools.name;
+            ViewBag.Poolname = pools.name;
             ViewBag.isKachel = pools.size > 0;
             ViewBag.id = id;
 
@@ -142,7 +142,7 @@ namespace ASPWebClient.Controllers
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
 
-            return RedirectToAction("Details", imagesSet.ToList());
+            return View("Details", imagesSet);
         }
 
         [HttpPost, ActionName("Details")]

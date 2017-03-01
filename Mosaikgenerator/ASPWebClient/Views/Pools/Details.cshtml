@@ -7,7 +7,7 @@
 <h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
 </br>
 
-@using (Html.BeginForm("Details", "Pools", FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Details", "Pools", new { id = ViewBag.id }, FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
@@ -29,7 +29,7 @@
 @{
     if (ViewBag.isKachel)
     {
-        Html.BeginForm("GenKacheln", null, new {  },  FormMethod.Post);
+        Html.BeginForm("GenKacheln", null, new { id = ViewBag.id },  FormMethod.Post);
                 <div>
                     <div class="form-group">
                         <div class="col-md-3">
