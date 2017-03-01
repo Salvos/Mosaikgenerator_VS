@@ -165,13 +165,12 @@ namespace ASPWebClient.Controllers
             ViewBag.isKachel = pools.size > 0;
             ViewBag.id = id;
 
+            String folder = "Kacheln";
+            if (pools.size == 0)
+                folder = "Motive";
 
             foreach (var file in files)
             {
-                String folder = "Kacheln";
-                if (pools.size == 0)
-                    folder = "Motive";
-
                 String UUID = Guid.NewGuid().ToString();
                 String extention = System.IO.Path.GetExtension(file.FileName);
                 string filename = UUID + extention;
@@ -288,6 +287,19 @@ namespace ASPWebClient.Controllers
         {
             int imageCount = db.ImagesSet.Where(o => o.PoolsId == id).Count();
             return PartialView(imageCount);
+        }
+
+        public ActionResult Thumbnail(int image, bool isKachel)
+        {
+            var pic = db.ImagesSet.Where(i => i.Id == image).First();
+
+            String folder = "Kacheln";
+            if (!isKachel)
+                folder = "Motive";
+
+            byte[] byteImage = System.IO.File.ReadAllBytes("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + pic.filename);
+
+            return File(byteImage, "image/png");
         }
 
         protected override void Dispose(bool disposing)
