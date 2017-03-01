@@ -17,6 +17,10 @@ namespace ASPWebClient.Controllers
     {
         private DBModelContainer db = new DBModelContainer();
 
+        // DEBUGGING
+        // Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
+        private const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
+
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Home");
@@ -85,9 +89,19 @@ namespace ASPWebClient.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Images images = db.ImagesSet.Find(id);
-            db.ImagesSet.Remove(images);
-            db.SaveChanges();
-            return RedirectToAction("Details", "Pools", new { id = images.Pools.Id });
+            Pools thisPool = db.PoolsSet.Find(images.PoolsId);
+            if(!thisPool.writelock)
+            {
+                // Speichere die Änderungen in der Datenbank
+                db.ImagesSet.Remove(images);
+                db.SaveChanges();
+
+                // Entferne das Bild im FileSystem
+                System.IO.File.Delete(IMAGEPATH+images.path+images.filename);
+
+                return RedirectToAction("Details", "Pools", new { id = images.PoolsId });
+            }
+            return RedirectToAction("Delete", "Pools", new { id = images.PoolsId });
         }
 
         public ActionResult Mosaik(int? id)
@@ -98,9 +112,7 @@ namespace ASPWebClient.Controllers
             }
 
             ViewBag.Basis = id;
-            ViewBag.Test = "test";
-            var user = User.Identity.Name;
-            var poolsSet = db.PoolsSet.Where(p => p.owner == user);
+            var poolsSet = db.PoolsSet.Where(p => p.owner == User.Identity.Name);
 
             return View(poolsSet.ToList());
         }
@@ -114,7 +126,6 @@ namespace ASPWebClient.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.Test = "Mosaik";
             ViewBag.Basis = id;
 
             EndpointAddress endPoin = new EndpointAddress("http://localhost:8080/mosaikgenerator/mosaikgenerator");
@@ -134,7 +145,7 @@ namespace ASPWebClient.Controllers
 
             channelfactory.Close();
 
-            return Redirect("/Pools/Details/" + mosaPool);
+            return RedirectToAction("Details", "Pools", new { id = mosaPool });
         }
 
         protected override void Dispose(bool disposing)

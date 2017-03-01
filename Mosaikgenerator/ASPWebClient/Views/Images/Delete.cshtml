@@ -6,18 +6,25 @@
 
 <h2>Lösche: @Html.Raw(Model.displayname)</h2>
 
-<h3>Bist du dir sicher dass du das Bild löschen möchtest?</h3>
-<div>
-
-    @using (Html.BeginForm())
+    @if (Model.Pools.writelock)
     {
-        @Html.AntiForgeryToken()
+        <h3>Die Sammlung ist gerade durch einen Dienst unsererseits gesperrt.</h3>
+    }
+    else
+    {
+        <h3>Bist du dir sicher dass du das Bild löschen möchtest?</h3>
+        <div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" />
-            <a href="@Url.Action("Details", "Pools",  new { id = Model.PoolsId })" class="btn btn-warning">
-                Zurück zur Sammlung
-            </a>
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-default" />
+                    <a href="@Url.Action("Details", "Pools",  new { id = Model.PoolsId })" class="btn btn-warning">
+                        Zurück zur Sammlung
+                    </a>
+                </div>
+            }
         </div>
     }
-</div>
+
