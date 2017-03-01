@@ -16,11 +16,11 @@
             <div class="col-md-3">
                 @if(ViewBag.isKachelPool)
                 {
-                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Kachelsammlung" } })
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Kachelsammlung", @required = "required"} })
                 }
                 else
                 {
-                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Bildersammlung" } })
+                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Name der Bildersammlung", @required = "required" } })
                 }
                 @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
             </div>
@@ -28,7 +28,7 @@
             @if (ViewBag.isKachelPool)
             {
             <div class="col-md-3">
-                @Html.EditorFor(model => model.size, new { htmlAttributes = new { @class = "form-control", @min="10", @max="40", @placeholder = "Größe der Kacheln" } })
+                @Html.EditorFor(model => model.size, new { htmlAttributes = new { @class = "form-control", @min="10", @max="40", @step="1", @placeholder = "Größe der Kacheln" } })
                 @Html.ValidationMessageFor(model => model.size, "", new { @class = "text-danger" })
             </div>
             }
