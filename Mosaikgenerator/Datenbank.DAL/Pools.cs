@@ -11,7 +11,7 @@ namespace Datenbank.DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class Pools
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +21,14 @@ namespace Datenbank.DAL
         }
     
         public int Id { get; set; }
+
+        [Display(Name = "Name")]
         public string name { get; set; }
+
+        [Display(Name = "Besitzer")]
         public string owner { get; set; }
+
+        [Display(Name = "Bildergröße")]
         public int size { get; set; }
         public bool writelock { get; set; }
     

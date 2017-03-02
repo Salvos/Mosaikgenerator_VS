@@ -34,27 +34,6 @@ namespace ASPWebClient.Controllers
         }
 
         /// <summary>
-        /// Gibt die Informationen eines Bildes an die View zurück
-        /// Wurde das Bild nicht gefunden / ist nicht das eigene wird ein 404 ausgegeben
-        /// </summary>
-        /// <param name="id">ID des Bildes</param>
-        /// <returns>BadRequest / NotFound / View</returns>
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Images images = db.ImagesSet.Find(id);
-            if (images == null || images.Pools.owner != User.Identity.Name)
-            {
-                return HttpNotFound();
-            }
-
-            return View(images);
-        }
-
-        /// <summary>
         /// Editieren der Anzeigenamen der Bilder (mehr nicht!)
         /// Wurde das Bild nicht gefunden / ist nicht das eigene wird ein 404 ausgegeben
         /// </summary>

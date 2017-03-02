@@ -11,7 +11,7 @@ namespace Datenbank.DAL
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
     public partial class Images
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,12 +20,23 @@ namespace Datenbank.DAL
             this.path = "Motive\\";
         }
     
+
         public int Id { get; set; }
         public int PoolsId { get; set; }
+
+        [Display(Name = "Dateipfad")]
         public string path { get; set; }
+
+        [Display(Name = "Dateiname")]
         public string filename { get; set; }
+
+        [Display(Name ="Name")]
         public string displayname { get; set; }
+
+        [Display(Name = "Breite")]
         public int width { get; set; }
+
+        [Display(Name = "Höhe")]
         public int heigth { get; set; }
         public string hsv { get; set; }
     

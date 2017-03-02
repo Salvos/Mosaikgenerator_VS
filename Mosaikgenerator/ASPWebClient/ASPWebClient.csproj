@@ -282,7 +282,6 @@
     <Content Include="Views\Pools\Index.cshtml" />
     <Content Include="Views\Pools\Kacheln.cshtml" />
     <Content Include="Views\Images\Delete.cshtml" />
-    <Content Include="Views\Images\Details.cshtml" />
     <Content Include="Views\Images\Edit.cshtml" />
     <Content Include="Views\Images\Index.cshtml" />
     <Content Include="Views\Images\Mosaik.cshtml" />
