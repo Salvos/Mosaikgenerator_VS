@@ -15,13 +15,14 @@ namespace ASPWebClient.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        /*=====Konstanten=====*/
         /// <summary>
         /// "Datenbankverbindung"
         /// </summary>
         private DBModelContainer db = new DBModelContainer();
 
-        // Statischer Bilderpfad
+        /// <summary>
+        /// Statischer Bilderpfad - verweist auf den "Meine Bilder" Ordner des Users
+        /// </summary>
         private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
         /// <summary>

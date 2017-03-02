@@ -16,25 +16,41 @@ namespace ASPWebClient.Controllers
     [Authorize]
     public class PoolsController : Controller
     {
-        /*=====Konstanten=====*/
         /// <summary>
         /// "Datenbankverbindung"
         /// </summary>
         private DBModelContainer db = new DBModelContainer();
 
-        // Statischer Bilderpfad
+        /// <summary>
+        /// Statischer Bilderpfad - verweist auf den "Meine Bilder" Ordner des Users
+        /// </summary>
         private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
+        /// <summary>
+        /// Beim Aufruf der Index (/Images/) soll der User auf die Startseite umgeleitet werden
+        /// </summary>
+        /// <returns>Redirect</returns>
         public ActionResult Index()
         {
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Gibt genauso wie die Kacheln die Pool die Poolansicht zurück
+        /// Das wurde gemacht damit die Kacheln und die Bildersammlungen auch optisch (vom Link) getrennt sind!
+        /// </summary>
+        /// <returns>View</returns>
         public ActionResult Bildersammlungen()
         {
             return View();
         }
-
+ 
+        /// <summary>
+        /// HTTP-POST
+        /// Erstellt einen neuen Pool für den Benutzer in der jeweiligen Ansicht
+        /// Das wurde gemacht damit die Kacheln und die Bildersammlungen auch optisch (vom Link) getrennt sind!
+        /// </summary>
+        /// <returns>Redirect</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Bildersammlungen([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
@@ -48,11 +64,22 @@ namespace ASPWebClient.Controllers
             return RedirectToAction("Bildersammlungen");
         }
 
+        /// <summary>
+        /// Gibt genauso wie die Bildersammlungen die Pool die Poolansicht zurück
+        /// Das wurde gemacht damit die Kacheln und die Bildersammlungen auch optisch (vom Link) getrennt sind!
+        /// </summary>
+        /// <returns>View</returns>
         public ActionResult Kacheln()
         {
             return View();
         }
 
+        /// <summary>
+        /// HTTP-POST
+        /// Erstellt einen neuen Pool für den Benutzer in der jeweiligen Ansicht
+        /// Das wurde gemacht damit die Kacheln und die Bildersammlungen auch optisch (vom Link) getrennt sind!
+        /// </summary>
+        /// <returns>Redirect</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Kacheln([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
@@ -66,6 +93,11 @@ namespace ASPWebClient.Controllers
             return RedirectToAction("Kacheln");
         }
 
+        /// <summary>
+        /// Gibt die Liste mit allen Pools (je nach Kachel oder Bildersammlung) zurück
+        /// </summary>
+        /// <param name="isKachelPool">Ob der Pool ein Kachelpool ist</param>
+        /// <returns>PartialView</returns>
         public ActionResult PoolsList(bool? isKachelPool)
         {
             var user = User.Identity.Name;
@@ -85,6 +117,11 @@ namespace ASPWebClient.Controllers
             return PartialView(poolsSet.ToList());
         }
 
+        /// <summary>
+        /// Gibt die Informationen zu dem Pool aus
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>View</returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -96,7 +133,7 @@ namespace ASPWebClient.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.added = false;
+
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
             ViewBag.Poolname = pools.name;
             ViewBag.isKachel = pools.size > 0;
@@ -105,8 +142,17 @@ namespace ASPWebClient.Controllers
             return View(imagesSet.ToList());
         }
 
+        /// <summary>
+        /// HTTP-POST
+        /// Schickt die Informationen zum generieren der Kacheln an den KachelGenerator
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <param name="color">Die Farbe mit der die Kacheln generiert werden sollen</param>
+        /// <param name="count">Die Anzahl der zu generierenden Bilder</param>
+        /// <param name="noise">Ob ein Rauschen eingefügt werden soll</param>
+        /// <returns>BadRequest, HttpNotFound, View</returns>
         [HttpPost]
-        public ActionResult GenKacheln(int? id, string color, string count, string nois = "0")
+        public ActionResult GenKacheln(int? id, string color, string count, string noise = "0")
         {
             if (id == null)
             {
@@ -135,7 +181,7 @@ namespace ASPWebClient.Controllers
                 proxy = channelFactory.CreateChannel();
                 for (int i = 0; i < int.Parse(count); i++)
                 {
-                    proxy.genKachel(pools.Id, newColor.R, newColor.G, newColor.B, nois == "1");
+                    proxy.genKachel(pools.Id, newColor.R, newColor.G, newColor.B, noise == "1");
                 }
             }
             catch (Exception e)
@@ -151,6 +197,14 @@ namespace ASPWebClient.Controllers
             return View("Details", imagesSet);
         }
 
+        /// <summary>
+        /// HTTP-POST
+        /// Zum hochladen eines oder mehrerer Bilder 
+        /// Wenn der Pool ein Kachelpool ist wird das Bild zudem zugeschnitten (cropping & scaling)
+        /// </summary>
+        /// <param name="files">Die Dateien die hochgeladen werden sollen</param>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>BadRequest, HttpNotFound, View</returns>
         [HttpPost, ActionName("Details")]
         [ValidateAntiForgeryToken]
         public ActionResult UploadImage(IEnumerable<HttpPostedFileBase> files, int? id)
@@ -229,6 +283,11 @@ namespace ASPWebClient.Controllers
             return View(imagesSet.ToList());
         }
 
+        /// <summary>
+        /// Gibt die View zum Editieren des Poolnamens zurück
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>BadRequest, HttpNotFound, View</returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -246,6 +305,12 @@ namespace ASPWebClient.Controllers
             return View(pools);
         }
 
+        /// <summary>
+        /// HTTP-Post
+        /// Gibt die View zum Editieren des Poolnamens zurück
+        /// </summary>
+        /// <param name="pools">Der Pool der bearbeitet wurde</param>
+        /// <returns>Redirect, View</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,name,size,writelock")] Pools pools)
@@ -261,6 +326,11 @@ namespace ASPWebClient.Controllers
             return View(pools);
         }
 
+        /// <summary>
+        /// Gibt die View zum Löschen des Pools zurück
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>BadRequest, HttpNotFound, View</returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -277,6 +347,12 @@ namespace ASPWebClient.Controllers
             return View(pools);
         }
 
+        /// <summary>
+        /// HTTP-POST
+        /// Löscht einen angegebenen Pool und wechselt zur Poolübersicht
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>Redirect</returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -289,12 +365,23 @@ namespace ASPWebClient.Controllers
             return RedirectToAction("Kacheln");
         }
 
+        /// <summary>
+        /// Gibt die Anzahl der Bilder im Pool zurück
+        /// </summary>
+        /// <param name="id">Die ID des Pools</param>
+        /// <returns>PartialView</returns>
         public ActionResult PoolCount(int id)
         {
             int imageCount = db.ImagesSet.Where(o => o.PoolsId == id).Count();
             return PartialView(imageCount);
         }
 
+        /// <summary>
+        /// Gibt das Bild aus dem Filesystem via Base64 zurück
+        /// </summary>
+        /// <param name="image">ID des Bildes</param>
+        /// <param name="isKachel">Ob das Bild aus einem Kachelpool stammt</param>
+        /// <returns>File</returns>
         public ActionResult Thumbnail(int image, bool isKachel)
         {
             var pic = db.ImagesSet.Where(i => i.Id == image).First();
@@ -307,7 +394,11 @@ namespace ASPWebClient.Controllers
 
             return File(byteImage, "image/png");
         }
-
+ 
+        /// <summary>
+        /// Schon vorhandene Funktion zum "entsorgen" der Datenbankverbindung
+        /// </summary>
+        /// <param name="disposing">Trennen der Datenbankverbindung</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
