@@ -362,17 +362,60 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Pools pools = db.PoolsSet.Find(pools.Id);
+            Pools pools = db.PoolsSet.Find(id);
             if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
 
-            db.PoolsSet.Remove(pools);
-            db.SaveChanges();
+            String redirect;
             if (pools.size == 0)
-                return RedirectToAction("Bildersammlungen");
-            return RedirectToAction("Kacheln");
+                redirect = "Bildersammlungen";
+            redirect = "Kacheln";
+
+            bool writelock = false;
+            if(pools.size == 0)
+            {
+                List<Motive> motive = db.ImagesSet.OfType<Motive>().Where(k => k.PoolsId == id).ToList();
+                foreach(Motive motiv in motive)
+                {
+                    if (motiv.writelock)
+                        writelock = true;
+                    break;
+                }
+            }
+
+            if (!pools.writelock && !writelock)
+            {
+                bool error = false;
+
+                List<Images> images = db.ImagesSet.Where(k => k.PoolsId == id).ToList();
+                try
+                {
+                    foreach (Images image in images)
+                    {
+                        // Entferne das Bild im FileSystem
+                        System.IO.File.Delete(IMAGEPATH + image.path + image.filename);
+
+                        // Speichere die Änderungen in der Datenbank
+                        db.ImagesSet.Remove(image);
+                        db.SaveChanges();
+                    }
+                } catch(Exception e)
+                {
+                    error = true;
+                }
+
+                if( !error )
+                {
+                    db.PoolsSet.Remove(pools);
+                    db.SaveChanges();
+                }
+
+                return RedirectToAction(redirect);
+            }
+
+            return RedirectToAction(redirect);
         }
 
         /// <summary>
