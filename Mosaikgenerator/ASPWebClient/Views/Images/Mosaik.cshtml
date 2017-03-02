@@ -10,7 +10,7 @@
     @Html.AntiForgeryToken()
         
         <div class="form-group">
-                <label for="kachelPool">Kachelpool wählen:</label>
+                <label for="kachelPool">Welcher Kachelpool soll genutzt werden?:</label>
                 <select class="form-control" id="kachelPool" name="kachelPool">
             @foreach (var item in Model)
             {
@@ -23,7 +23,7 @@
                 </select>
         </div>
         <div class="form-group">
-                <label for="mosaPool">Motivepool wählen</label>
+                <label for="mosaPool">Wo soll gespeichert werden?</label>
                 <select class="form-control" id="mosaPool" name="mosaPool">
             @foreach (var item in Model)
             {
@@ -37,14 +37,19 @@
         </div>
         <div class="form-group">
             <div class="checkbox">
-                <label><input type="checkbox" value="1" name="multi" id="multi">Kachel öffter nutzen</label>
+                <label><input type="checkbox" checked="checked" value="1" name="multi" id="multi">Sollen Kacheln öfters vorkommen?</label>
             </div>
         </div>
         <div class="form-group">
-            <label for="bestof">Best of</label>
-            <input class="form-control" type="number" name="bestof" min="1" max="5" step="1" id="bestof" value="1"/>
+            <label for="bestof">Aus wievielen der besten Kacheln soll eine zufällige gewählt werden</label>
+            <p>
+                <strong>Hinweis: </strong>Sollte das beste Mosaikbild entstehen ist eine kleine Zahl besser.<br>
+                Je höher desto zufälliger wird das Ergebnis
+            </p>
+
+        <input class="form-control" type="number" name="bestof" min="1" max="10" step="1" id="bestof" value="1"/>
         </div>
         <div class="form-group">
-                <input type="submit" value="Erstellen" class="btn btn-success" />
+                <input type = "submit" value="Erstellen" class="btn btn-success" />
         </div>
 }

@@ -1,7 +1,60 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Anleitung";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+<h2>Anleitung</h2>
 
-<p>Use this area to provide additional information.</p>
+<h3>1. Account</h3>
+<p>
+    Sofern noch nicht vorhanden, wird ein Account zum Nutzen dieser Anwendung ein Account vorrausgesetzt.</br>
+    Dieser kann @Html.ActionLink("hier (Registrieren)", "Register", "Account") angelegt werden.</br>
+    Ist schon ein Account vorhanden kannst du dich @Html.ActionLink("hier (Login)", "Login", "Account")  mit deinen Daten einloggen.
+</p>
+
+</br>
+
+<h3>2. Sammlungen</h3>
+<p>
+    Bevor du mit dem Bilder generieren anfangen kannst brauchst du Sammlungen für eben diese.</br>
+    Du brauchst mindestens:
+    <ul>
+        <li>
+            Eine Bildersammlung in der du deine sogenannten Motiv hochladen möchtest.</br>
+            Das sind die Bilder die im nachhinein mit vielen Kacheln zu einem Mosaik generiert werden.
+        </li>
+        <li>
+            Eine Kachelsammlung in der du die ganzen Kacheln hochladen möchtest.</br>
+            Hier bieten wir dir auch eine Möglichkeit zufällig generierte farbige Kacheln zu generieren.</br>
+            Kacheln sind Bilder die an passende Stellen in dein Motiv eingefügt werden.</br>
+            <strong>Wichtig: </strong> Die Größe der Kacheln gibt an auf was für eine Größe Kacheln zugeschnitten werden sollen. Je größer desto länger der Mosaikvorgang und desto größer dein Bild
+        </li>
+        <li>
+            (Optional) Eine weitere Bildersammlung in der das generierte Mosaik gespeichert werden soll
+        </li>
+    </ul>
+
+    Hast du diese Sammlungen erstellt, kannst du sie befüllen indem du Bilder hochlädst oder Kacheln generieren lässt.
+</p>
+
+</br>
+
+<h3>3. Mosaik</h3>
+<p>
+    Sind die Sammlungen befüllt kannst du ein Mosaik generieren.</br>
+    Dafür gehst du in die Bildersammlungen, und wählst ein Motiv aus einer Sammlung aus und klickst auf den Button in der Spalte "Mosaikgenerator"</br>
+    </br>
+    <ul>
+        <li>
+            In der Generatorübersicht kannst du nun eine Kachelsammlung auswählen aus dem das Mosaik gefertigt werden soll
+        </li>
+        <li>
+            Die Sammlung auswählen in der das Mosaik gespeichert werden soll
+        </li>
+        <li>
+            Ob Kacheln öfters benutzt werden dürfen (falls nicht müssen genug existieren)
+        </li>
+        <li>
+            Und aus wievielen der besten Kacheln der Mosaikgenerator auswählen soll</br>
+            Dafür speichert der Mosaikgenerator die N Besten Kacheln und wählt eine zufällige aus die an der Stelle benutzt wird.
+        </li>
+    </ul>
+</p>

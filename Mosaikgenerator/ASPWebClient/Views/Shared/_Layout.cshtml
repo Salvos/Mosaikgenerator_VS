@@ -30,7 +30,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - VWW 2016 - [Eggers, Gabriel & Wilke]</p>
+            <p>&copy; @DateTime.Now.Year - @Html.ActionLink("VWW 2016 - [Eggers, Gabriel & Wilke]", "Contact", "Home")</p>
         </footer>
     </div>
 

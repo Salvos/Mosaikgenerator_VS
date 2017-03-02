@@ -287,21 +287,17 @@ namespace Mosaikgenerator
                 }
             }
 
-
             // Generiere eine Einzigartige Bezeichnung
             String UUID = Guid.NewGuid().ToString();
 
             // Speichere das Bild ab
             mosaik.Save(IMAGEPATH + "Motive\\" + UUID + ".png");
 
-            var image = db.Set<Images>();
-            image.Add(new Images { displayname = "Mosaik", filename = UUID + ".png", path = "Motive\\", heigth = (basisMotiv.Size.Height * kachelPool.size), width = (basisMotiv.Size.Width * kachelPool.size), hsv = "000", PoolsId = mosaikPoolID });
-
-            // Mosaik fertig :)
+            var image = db.Set<Motive>();
+            image.Add(new Motive { displayname = "Mosaik", filename = UUID + ".png", path = "Motive\\", heigth = (basisMotiv.Size.Height * kachelPool.size), width = (basisMotiv.Size.Width * kachelPool.size), hsv = "000", PoolsId = mosaikPoolID, writelock=false });
 
             // Speichere die DB
             db.SaveChanges();
-            //db.ImagesSet.Add(new Images())
 
             return true;
         }
