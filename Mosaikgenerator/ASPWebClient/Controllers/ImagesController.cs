@@ -21,11 +21,8 @@ namespace ASPWebClient.Controllers
         /// </summary>
         private DBModelContainer db = new DBModelContainer();
 
-        // DEBUGGING
-        /// <summary>
-        /// Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
-        /// </summary>
-        private const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
+        // Statischer Bilderpfad
+        private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
         /// <summary>
         /// Beim Aufruf der Index (/Images/) soll der User auf die Startseite umgeleitet werden

@@ -15,9 +15,8 @@ namespace Mosaikgenerator
         // "Datenbankverbindung"
         private static DBModelContainer db = new DBModelContainer();
 
-        // DEBUGGING
-        // Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
-        private const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
+        // Statischer Bilderpfad
+        private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
         // DEBUGGING
         // Konsolenausgaben (de-)aktvieren wenns gewünscht ist
@@ -30,35 +29,6 @@ namespace Mosaikgenerator
             ERROR,
             INFO
         }
-
-        /// <summary>
-        /// Main - Hier werden Testroutinen genutzt
-        /// </summary>
-        /// <param name="args">-/-</param>
-        /*
-        static void Mainy(string[] args)
-        {
-            // DEBUGGING
-            // Pre Initialisierung der Datenbank (Nur nach neuaufsetzen nutzbar)
-            preStorage();
-
-            // DEBUGGING
-            // Testfunktionen fuer die Datenbank (nur zum lernen :) )
-            //testDatabase();
-
-            // DEBUGGING
-            // Gibt die Durchschnittsfarben der einzelnen Kacheln an
-            AVGKachel();
-
-            // DEBUGGING
-            // Testweiser Mosaikgenerator der das "Mario" Basismotiv mit dem Pool in dem sich auch "KachelA" befindet in Pool 3 speichert
-            //mosaikGenerator(db.ImagesSet.Where(p => p.displayname == "Mario").First().Id, db.ImagesSet.Where(p => p.displayname == "kachelA").First().PoolsId, 3, true, 1);
-
-            // Beende das Programm erst auf Enter
-            Console.WriteLine();
-            Console.WriteLine("Enter to Exit");
-            Console.ReadLine();
-        }*/
 
         /*=====Weitere Funktionen=====*/
         /// <summary>
@@ -329,104 +299,6 @@ namespace Mosaikgenerator
             // Speichere die DB
             db.SaveChanges();
             //db.ImagesSet.Add(new Images())
-        }
-
-        // DEBUGGING
-
-        /// <summary>
-        /// Speichert vordefinierte Informationen in der Datenbank
-        /// Nach JEDEM Datenbank-Update muss das hier ueberprueft werden!
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <param name="email"></param>
-        /// <param name="poolMotive"></param>
-        /// <param name="poolKacheln"></param>
-        /// <param name="poolMosaike"></param>
-        private static void preStorage(String username = "Demo", String poolMotive = "Motive", String poolKacheln = "Kacheln", String poolMosaike = "Mosaike")
-        {
-            // Speichert drei Pools fuer den Nutzer
-            db.PoolsSet.Add(new Pools { name = "Motive", owner = username, size = 0, writelock = false });
-            db.PoolsSet.Add(new Pools { name = "Kacheln", owner = username, size = 10, writelock = false });
-            db.PoolsSet.Add(new Pools { name = "Mosaike", owner = username, size = 0, writelock = false });
-            db.SaveChanges();
-
-            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "apple.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Apfel", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
-            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "mario.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Mario", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
-            db.Set<Motive>().Add(new Motive { path = "Motive\\", filename = "pikachu.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolMotive).First().Id, displayname = "Pikachu", heigth = 64, width = 64, hsv = "0", readlock = false, writelock = false });
-
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelA.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelA", heigth = 10, width = 10, hsv = "0", avgR = 237, avgG = 28, avgB = 36 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelB.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelB", heigth = 10, width = 10, hsv = "0", avgR = 0, avgG = 162, avgB = 231 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelC.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelC", heigth = 10, width = 10, hsv = "0", avgR = 255, avgG = 242, avgB = 0 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelD.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelD", heigth = 10, width = 10, hsv = "0", avgR = 181, avgG = 230, avgB = 29 });
-            db.Set<Kacheln>().Add(new Kacheln { path = "Kacheln\\", filename = "kachelE.png", PoolsId = db.PoolsSet.Where(p => p.owner == username && p.name == poolKacheln).First().Id, displayname = "KachelE", heigth = 10, width = 10, hsv = "0", avgR = 163, avgG = 73, avgB = 164 });
-
-            // Speichere die DB
-            db.SaveChanges();
-        }
-
-        // DEBUGGING
-        /// <summary>
-        /// Spielwiese fuer einige Tests mit der Datenbank (Joins, Counts etc.)
-        /// </summary>
-        private static void testDatabase()
-        {
-            // Gibt die Anzahl aller Eintraege in Images aus
-            Console.WriteLine("x" + db.ImagesSet.Count<Images>() + "y");
-
-            // Gibt die Anzahl aller Eintraege in Images aus
-            Console.WriteLine("x" + db.ImagesSet.OfType<Kacheln>().Count<Images>() + "y");
-
-            // Holt die Kachel mit der ID 5
-            var k = db.ImagesSet.OfType<Kacheln>().Where(p => p.Id == 5);
-
-            // Gibt das Element aus 
-            Console.WriteLine("x" + k.First() + "y");
-
-            // Gibt Informationen ueber alle Kacheln aus
-            Console.WriteLine("Kachels only: ");
-            foreach (var kachel in db.ImagesSet.OfType<Kacheln>())
-            {
-                Console.WriteLine("    {0} {1} {2}", kachel.avgR, kachel.avgG, kachel.avgB);
-            }
-
-            // Gibt die AVGR der Kachel mit der ID 4 aus
-            Console.WriteLine("x" + db.ImagesSet.OfType<Kacheln>().Where(p => p.Id == 4).First().avgR + "y");
-        }
-
-        // DEBUGGING
-        private static void AVGKachel()
-        {
-            Kacheln[] poolBilder = db.ImagesSet.OfType<Kacheln>().Where(p => p.PoolsId == 2).ToArray();
-            foreach (Kacheln img in poolBilder)
-            {
-                Bitmap datei = openImage(img.Id);
-                double red = 0;
-                double green = 0;
-                double blue = 0;
-                var ges = datei.Width * datei.Height;
-                for (int i = 0; i < datei.Width; i++)
-                {
-                    for (int j = 0; j < datei.Height; j++)
-                    {
-                        Color rgb = datei.GetPixel(i, j);
-                        red += rgb.R;
-                        green += rgb.G;
-                        blue += rgb.B;
-                    }
-                }
-                red = red / ges;
-                green = green / ges;
-                blue = blue / ges;
-
-                // Speichere diese AVG-Werte in der Datenbank
-                db.Set<Kacheln>().Where(p => p.Id == img.Id).Single().avgR = (int)red;
-                db.Set<Kacheln>().Where(p => p.Id == img.Id).Single().avgG = (int)green;
-                db.Set<Kacheln>().Where(p => p.Id == img.Id).Single().avgB = (int)blue;
-                db.SaveChanges();
-
-                Console.WriteLine(img.displayname + ": (" + red + " -- " + green + " -- " + blue + ")");
-            }
         }
     }
 }

@@ -15,8 +15,8 @@ namespace ImageHandler
         // "Datenbankverbindung"
         private static DBModelContainer db = new DBModelContainer();
 
-        // Statischer Bilderpfad - Muss im nachhinein entfernt ODER "" gesetzt werden.
-        protected const string IMAGEPATH = "D:\\Bilder\\Projekte\\MosaikGenerator\\";
+        // Statischer Bilderpfad
+        private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
         // Mögliche Typen von Konsolenausgaben
         private enum ConsolePrintTypes

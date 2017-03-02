@@ -16,8 +16,14 @@ namespace ASPWebClient.Controllers
     [Authorize]
     public class PoolsController : Controller
     {
-
+        /*=====Konstanten=====*/
+        /// <summary>
+        /// "Datenbankverbindung"
+        /// </summary>
         private DBModelContainer db = new DBModelContainer();
+
+        // Statischer Bilderpfad
+        private static string IMAGEPATH = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
 
         public ActionResult Index()
         {

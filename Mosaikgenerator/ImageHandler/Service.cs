@@ -12,6 +12,15 @@ namespace ImageHandler
     {
         static void Main(string[] args)
         {
+
+            String basicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
+
+            if (!System.IO.Directory.Exists(basicPath))
+            {
+                Console.WriteLine("VS16_MosaikGenerator existiert noch nicht - Wird erstellt");
+                System.IO.Directory.CreateDirectory(basicPath);
+            }
+
             ServiceHost host = null;
 
             try
