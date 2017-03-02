@@ -109,9 +109,9 @@ namespace Kachelgenerator
                 width = bitmap.Size.Width,
                 hsv = "000",
                 PoolsId = kachelPoolID,
-                avgR = colorValue(bitmap, ColorType.RED),
-                avgG = colorValue(bitmap, ColorType.GREEN),
-                avgB = colorValue(bitmap, ColorType.BLUE)
+                avgR = (int)colorValue(bitmap, ColorType.RED),
+                avgG = (int)colorValue(bitmap, ColorType.GREEN),
+                avgB = (int)colorValue(bitmap, ColorType.BLUE)
             });
 
             // Speichere die DB
@@ -153,37 +153,36 @@ namespace Kachelgenerator
         /// <param name="bitmap">Die Bitmap die berechnet werden soll</param>
         /// <param name="type">Welcher der Farbwerte soll ausgegeben werden</param>
         /// <returns>Durchschnittlicher farbwert</returns>
-        private static int colorValue(Bitmap bitmap, ColorType type)
+        private static double colorValue(Bitmap bitmap, ColorType type)
         {
             printToConsole("Calculate RGB values", ConsolePrintTypes.INFO);
 
-            int valueR = 0;
-            int valueG = 0;
-            int valueB = 0;
-
-            for (int x = 0; x < bitmap.Width; x++)
+            double red = 0;
+            double green = 0;
+            double blue = 0;
+            var ges = bitmap.Width * bitmap.Height;
+            for (int i = 0; i < bitmap.Width; i++)
             {
-                for (int y = 0; y < bitmap.Height; y++)
+                for (int j = 0; j < bitmap.Height; j++)
                 {
-                    Color c = bitmap.GetPixel(x, y);
-                    valueR = +c.R;
-                    valueG = +c.G;
-                    valueB = +c.B;
+                    Color rgb = bitmap.GetPixel(i, j);
+                    red += rgb.R;
+                    green += rgb.G;
+                    blue += rgb.B;
                 }
             }
-
-            valueR = valueR / (bitmap.Width * bitmap.Width);
-            valueG = valueG / (bitmap.Width * bitmap.Width);
-            valueB = valueB / (bitmap.Width * bitmap.Width);
+            red = red / ges;
+            green = green / ges;
+            blue = blue / ges;
 
             switch (type)
             {
                 case ColorType.RED:
-                    return valueR;
+                    return red;
                 case ColorType.GREEN:
-                    return valueG;
+                    return green;
                 case ColorType.BLUE:
-                    return valueB;
+                    return blue;
             }
 
             return 0;
