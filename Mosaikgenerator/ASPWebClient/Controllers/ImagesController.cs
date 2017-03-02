@@ -66,12 +66,6 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,PoolsId,path,filename,displayname,width,heigth,hsv")] Images images)
         {
-            Images img = db.ImagesSet.Find(images.Id);
-            if (images == null || img.Pools.owner != User.Identity.Name)
-            {
-                return HttpNotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 db.Entry(images).State = EntityState.Modified;

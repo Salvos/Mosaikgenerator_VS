@@ -13,7 +13,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Löschen" class="btn btn-default" />
+            <input type="submit" value="Löschen" class="btn btn-danger" />
             @if (ViewBag.isKachelPool)
                 {
                 <a href="@Url.Action("Kacheln", "Pools")" class="btn btn-warning">

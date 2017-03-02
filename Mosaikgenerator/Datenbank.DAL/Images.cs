@@ -20,17 +20,16 @@ namespace Datenbank.DAL
             this.path = "Motive\\";
         }
     
-
         public int Id { get; set; }
         public int PoolsId { get; set; }
 
-        [Display(Name = "Dateipfad")]
+        [Display(Name = "Pfad")]
         public string path { get; set; }
 
         [Display(Name = "Dateiname")]
         public string filename { get; set; }
 
-        [Display(Name ="Name")]
+        [Display(Name = "Name")]
         public string displayname { get; set; }
 
         [Display(Name = "Breite")]

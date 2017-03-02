@@ -130,6 +130,16 @@
             @Html.DisplayNameFor(model => model.heigth)
         </th>
         <th>
+            Bearbeiten
+        </th>
+        <th>
+            Download
+        </th>
+        <th>
+            Löschen
+        </th>
+        <th>
+            Mosaikgenerator
         </th>
     </tr>
 
@@ -151,14 +161,18 @@
             <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Bearbeiten">
                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
             </a>
-
+        </td>
+        <td>
             <a href="@Url.Action("Download", "Images",  new { id = item.Id, isKachel = ViewBag.isKachel })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
                 <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
             </a>
-
+        </td>
+        <td>
             <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Löschen">
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </a>
+        </td>
+        <td>
             @{
                 if (!ViewBag.isKachel)
                 {
