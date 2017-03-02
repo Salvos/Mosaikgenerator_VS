@@ -232,7 +232,7 @@ namespace ASPWebClient.Controllers
             if (!isKachel)
                 folder = "Motive";
 
-            byte[] fileBytes = System.IO.File.ReadAllBytes("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + image.filename);
+            byte[] fileBytes = System.IO.File.ReadAllBytes(IMAGEPATH + folder + "\\" + image.filename);
 
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, image.filename);
         }
