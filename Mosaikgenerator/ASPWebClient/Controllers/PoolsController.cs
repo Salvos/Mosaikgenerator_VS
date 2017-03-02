@@ -100,18 +100,17 @@ namespace ASPWebClient.Controllers
         /// <returns>PartialView</returns>
         public ActionResult PoolsList(bool? isKachelPool)
         {
-            var user = User.Identity.Name;
             ViewBag.isKachelPool = isKachelPool;
 
             IQueryable<Pools> poolsSet;
 
             if ((bool)isKachelPool)
             {
-                poolsSet = db.PoolsSet.Where(k => k.size != 0).Where(p => p.owner == user);
+                poolsSet = db.PoolsSet.Where(k => k.size != 0).Where(p => p.owner == User.Identity.Name);
             }
             else
             {
-                poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == user);
+                poolsSet = db.PoolsSet.Where(k => k.size == 0).Where(p => p.owner == User.Identity.Name);
             }
 
             return PartialView(poolsSet.ToList());
@@ -129,7 +128,7 @@ namespace ASPWebClient.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Pools pools = db.PoolsSet.Find(id);
-            if (pools == null)
+            if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
@@ -161,7 +160,7 @@ namespace ASPWebClient.Controllers
 
             Pools pools = db.PoolsSet.Find(id);
 
-            if (pools == null)
+            if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
@@ -216,7 +215,7 @@ namespace ASPWebClient.Controllers
 
             Pools pools = db.PoolsSet.Find(id);
 
-            if (pools == null)
+            if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
@@ -295,7 +294,7 @@ namespace ASPWebClient.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Pools pools = db.PoolsSet.Find(id);
-            if (pools == null)
+            if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
@@ -315,6 +314,12 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserId,name,size,writelock")] Pools pools)
         {
+            Pools pool = db.PoolsSet.Find(pools.Id);
+            if (pool == null || pool.owner != User.Identity.Name)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(pools).State = EntityState.Modified;
@@ -338,7 +343,7 @@ namespace ASPWebClient.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Pools pools = db.PoolsSet.Find(id);
-            if (pools == null)
+            if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
@@ -357,7 +362,12 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Pools pools = db.PoolsSet.Find(id);
+            Pools pools = db.PoolsSet.Find(pools.Id);
+            if (pools == null || pools.owner != User.Identity.Name)
+            {
+                return HttpNotFound();
+            }
+
             db.PoolsSet.Remove(pools);
             db.SaveChanges();
             if (pools.size == 0)
@@ -372,7 +382,7 @@ namespace ASPWebClient.Controllers
         /// <returns>PartialView</returns>
         public ActionResult PoolCount(int id)
         {
-            int imageCount = db.ImagesSet.Where(o => o.PoolsId == id).Count();
+            int imageCount = db.ImagesSet.Where(o => o.PoolsId == id && o.Pools.owner == User.Identity.Name).Count();
             return PartialView(imageCount);
         }
 
@@ -384,7 +394,12 @@ namespace ASPWebClient.Controllers
         /// <returns>File</returns>
         public ActionResult Thumbnail(int image, bool isKachel)
         {
-            var pic = db.ImagesSet.Where(i => i.Id == image).First();
+            var pic = db.ImagesSet.Where(i => i.Id == image && i.Pools.owner == User.Identity.Name).First();
+
+            if(pic ==null)
+            {
+                return null;
+            }
 
             String folder = "Kacheln";
             if (!isKachel)
