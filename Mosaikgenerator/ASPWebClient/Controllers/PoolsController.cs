@@ -181,9 +181,9 @@ namespace ASPWebClient.Controllers
                 String extention = System.IO.Path.GetExtension(file.FileName);
                 string filename = UUID + extention;
 
-                file.SaveAs("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + filename);
+                file.SaveAs(IMAGEPATH + folder + "\\" + filename);
 
-                Bitmap bmp = new Bitmap("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + filename);
+                Bitmap bmp = new Bitmap(IMAGEPATH + folder + "\\" + filename);
 
                 String dateiname = file.FileName;
                 int fileExtPos = dateiname.LastIndexOf(".");
@@ -303,7 +303,7 @@ namespace ASPWebClient.Controllers
             if (!isKachel)
                 folder = "Motive";
 
-            byte[] byteImage = System.IO.File.ReadAllBytes("D:\\Bilder\\Projekte\\MosaikGenerator\\" + folder + "\\" + pic.filename);
+            byte[] byteImage = System.IO.File.ReadAllBytes(IMAGEPATH + folder + "\\" + pic.filename);
 
             return File(byteImage, "image/png");
         }
