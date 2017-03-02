@@ -121,7 +121,7 @@ namespace ASPWebClient.Controllers
         /// </summary>
         /// <param name="id">Die ID des Pools</param>
         /// <returns>View</returns>
-        public ActionResult Details(int? id, bool? generation = null)
+        public ActionResult Details(int? id, bool? gen = null)
         {
             if (id == null)
             {
@@ -135,9 +135,9 @@ namespace ASPWebClient.Controllers
 
             ViewBag.generation = 0;
 
-            if (generation!=null)
+            if (gen != null)
             {
-                ViewBag.generation = generation == false ? 1 : 2;
+                ViewBag.generation = gen == false ? 1 : 2;
             }
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
@@ -319,7 +319,7 @@ namespace ASPWebClient.Controllers
         /// <returns>Redirect, View</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,name,size,writelock")] Pools pools)
+        public ActionResult Edit([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
         {
             Pools pool = db.PoolsSet.Find(pools.Id);
             if (pool == null || pool.owner != User.Identity.Name)
@@ -375,10 +375,9 @@ namespace ASPWebClient.Controllers
                 return HttpNotFound();
             }
 
-            String redirect;
+            String redirect = "Kacheln";
             if (pools.size == 0)
                 redirect = "Bildersammlungen";
-            redirect = "Kacheln";
 
             bool writelock = false;
             if(pools.size == 0)
