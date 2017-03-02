@@ -71,15 +71,15 @@
                         @using (Html.BeginForm("GenKacheln", null, new { id = ViewBag.id }, FormMethod.Post))
                         {
                             <div class="form-group">
-                                <label for="colorR">Roter Farbwert:</label>
+                                <label for="colorR">Max. Roter Farbwert:</label>
                                 <input type="number" class="form-control" id="colorR" name="colorR" value="255" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Rotanteil der Kacheln an">
                             </div>
                                 <div class="form-group">
-                                    <label for="colorG">Grüner Farbwert:</label>
+                                    <label for="colorG">Max. Grüner Farbwert:</label>
                                     <input type="number" class="form-control" id="colorG" name="colorG" value="50" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Grünanteil der Kacheln an">
                                 </div>
                                 <div class="form-group">
-                                    <label for="colorB">Blauer Farbwert:</label>
+                                    <label for="colorB">Max. Blauer Farbwert:</label>
                                     <input type="number" class="form-control" id="colorB" name="colorB" value="30" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Blauanteil der Kacheln an">
                                 </div>
                                 <div class="form-group">
@@ -138,9 +138,13 @@
         <th>
             Löschen
         </th>
+        @if (!ViewBag.isKachel)
+        {
         <th>
             Mosaikgenerator
         </th>
+        }
+
     </tr>
 
 @foreach (var item in Model) {
@@ -172,16 +176,17 @@
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </a>
         </td>
+    @{
+        if (!ViewBag.isKachel) {
         <td>
-            @{
-                if (!ViewBag.isKachel)
-                {
-                    <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
-                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                    </a>
-                }
-            }
+
+            <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
+                <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+            </a>
+               
         </td>
+        }
+    }
     </tr>
 }
 
