@@ -13,13 +13,7 @@ namespace ImageHandler
         static void Main(string[] args)
         {
 
-            String basicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
-
-            if (!System.IO.Directory.Exists(basicPath))
-            {
-                Console.WriteLine("VS16_MosaikGenerator existiert noch nicht - Wird erstellt");
-                System.IO.Directory.CreateDirectory(basicPath);
-            }
+            checkPath();
 
             ServiceHost host = null;
 
@@ -39,6 +33,29 @@ namespace ImageHandler
 
                 host.Close();
 
+            }
+        }
+
+        static void checkPath()
+        {
+            String basicPath = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\VS16_MosaikGenerator\\";
+
+            if (!System.IO.Directory.Exists(basicPath))
+            {
+                Console.WriteLine("VS16_MosaikGenerator existiert noch nicht - Wird erstellt");
+                System.IO.Directory.CreateDirectory(basicPath);
+            }
+
+            if (!System.IO.Directory.Exists(basicPath + "Motive\\"))
+            {
+                Console.WriteLine("VS16_MosaikGenerator\\Motive\\ existiert noch nicht - Wird erstellt");
+                System.IO.Directory.CreateDirectory(basicPath + "Motive\\");
+            }
+
+            if (!System.IO.Directory.Exists(basicPath + "Kacheln\\"))
+            {
+                Console.WriteLine("VS16_MosaikGenerator\\Kacheln\\ existiert noch nicht - Wird erstellt");
+                System.IO.Directory.CreateDirectory(basicPath + "Kacheln\\");
             }
         }
     }
