@@ -182,10 +182,19 @@ namespace ASPWebClient.Controllers
 
             try
             {
+                Random random = new Random();
+                int r;
+                int g;
+                int b;
+
                 proxy = channelFactory.CreateChannel();
                 for (int i = 0; i < int.Parse(count); i++)
                 {
-                    proxy.genKachel(pools.Id, int.Parse(colorR), int.Parse(colorG), int.Parse(colorB), noise == "1");
+                    r = random.Next(0, int.Parse(colorR));
+                    g = random.Next(0, int.Parse(colorG));
+                    b = random.Next(0, int.Parse(colorB));
+
+                    proxy.genKachel(pools.Id, r, g, b, noise == "1");
                 }
             }
             catch (Exception e)
