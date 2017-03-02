@@ -158,7 +158,7 @@ namespace ASPWebClient.Controllers
         /// <param name="noise">Ob ein Rauschen eingefügt werden soll</param>
         /// <returns>BadRequest, HttpNotFound, View</returns>
         [HttpPost]
-        public ActionResult GenKacheln(int? id, string color, string count, string noise = "0")
+        public ActionResult GenKacheln(int? id, string colorR, string colorG, string colorB, string count, string noise = "0")
         {
             if (id == null)
             {
@@ -171,8 +171,6 @@ namespace ASPWebClient.Controllers
             {
                 return HttpNotFound();
             }
-
-            Color newColor = ColorTranslator.FromHtml(color);
 
             ViewBag.Poolname = pools.name;
             ViewBag.isKachel = pools.size > 0;
@@ -187,7 +185,7 @@ namespace ASPWebClient.Controllers
                 proxy = channelFactory.CreateChannel();
                 for (int i = 0; i < int.Parse(count); i++)
                 {
-                    proxy.genKachel(pools.Id, newColor.R, newColor.G, newColor.B, noise == "1");
+                    proxy.genKachel(pools.Id, int.Parse(colorR), int.Parse(colorG), int.Parse(colorB), noise == "1");
                 }
             }
             catch (Exception e)
