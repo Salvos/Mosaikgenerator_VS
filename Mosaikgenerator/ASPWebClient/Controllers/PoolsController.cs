@@ -321,8 +321,7 @@ namespace ASPWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,owner,name,size,writelock")] Pools pools)
         {
-            Pools pool = db.PoolsSet.Find(pools.Id);
-            if (pool == null || pool.owner != User.Identity.Name)
+            if (pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
             }
