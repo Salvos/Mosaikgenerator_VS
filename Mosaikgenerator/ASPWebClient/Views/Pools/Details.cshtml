@@ -58,6 +58,24 @@
     }
 }
 
+@if (ViewBag.generation == 1)
+{
+    <div class="alert alert-danger">
+        <strong>Fehler!</strong> Das Mosaik konnte nicht generiert werden.
+    </div>
+}
+
+@if (ViewBag.generation == 2)
+{
+    <div class="alert alert-success">
+        <strong>Erfolg!</strong> Mosaik wurde generiert.
+    </div>
+}
+
+<div>
+    ViewBag.generation
+</div>
+
 <table class="table">
     <tr>
         <th>

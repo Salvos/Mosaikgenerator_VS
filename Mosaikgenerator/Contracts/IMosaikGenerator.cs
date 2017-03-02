@@ -12,6 +12,6 @@ namespace Contracts
     public interface IMosaikGenerator
     {
         [OperationContract]
-        void mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1);
+        bool mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1);
     }
 }

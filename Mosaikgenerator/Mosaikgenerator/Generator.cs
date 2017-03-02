@@ -104,13 +104,16 @@ namespace Mosaikgenerator
         /// <param name="mosaikPoolID">Die ID des Mosaikpools (in dem das Bild gespeichert wird)</param>
         /// <param name="kachelnMultiUseEnabled">Sollen Kacheln mehrfach genutzt werden duerfen?</param>
         /// <param name="auswahlNBesteKacheln">Aus wievielen der besten Bilder soll ein zufaelliges ausgewaehlt werden?</param>
-        public void mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1)
+        public bool mosaikGenerator(int basisMotivID, int kachelPoolID, int mosaikPoolID, Boolean kachelnMultiUseEnabled = true, int auswahlNBesteKacheln = 1)
         {
+
+            printToConsole("MosaikStart! (" + basisMotivID + "--" + kachelPoolID + "--" + mosaikPoolID + "--" + auswahlNBesteKacheln + ")", ConsolePrintTypes.INFO);
+
             // Pruefe ob alle wichtigen Parameter richtig gesetzt sind
             if (basisMotivID < 1 && kachelPoolID < 1 && mosaikPoolID < 1 && auswahlNBesteKacheln < 1)
             {
                 printToConsole("Falscher Parameter - Abbruch! (" + basisMotivID + "--" + kachelPoolID + "--" + mosaikPoolID + "--" + auswahlNBesteKacheln + ")", ConsolePrintTypes.ERROR);
-                return;
+                return false;
             }
 
             // Lade das Basismotiv in eine Bitmap
@@ -120,7 +123,7 @@ namespace Mosaikgenerator
             if (basisMotiv == null)
             {
                 printToConsole("Basismotiv nicht gefunden - Abbruch!", ConsolePrintTypes.ERROR);
-                return;
+                return false;
             }
 
             // Lade die Kachel-Poolinformationen aus der Datenbank
@@ -138,7 +141,7 @@ namespace Mosaikgenerator
                 {
                     basisMotiv.Dispose();
                     printToConsole("Zu wenig Kacheln im Pool!", ConsolePrintTypes.ERROR);
-                    return;
+                    return false;
                 }
             }
 
@@ -265,7 +268,7 @@ namespace Mosaikgenerator
                     if (thisKachel == null)
                     {
                         printToConsole("Kachel (" + bestfit + ") nicht gefunden - Abbruch!", ConsolePrintTypes.ERROR);
-                        return;
+                        return false;
                     }
 
                     // Füge nun jeden einzelnen Pixel an seiner dafür vorgesehnen Position ein
@@ -299,6 +302,8 @@ namespace Mosaikgenerator
             // Speichere die DB
             db.SaveChanges();
             //db.ImagesSet.Add(new Images())
+
+            return true;
         }
     }
 }
