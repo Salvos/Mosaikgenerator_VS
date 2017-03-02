@@ -193,20 +193,24 @@ namespace ASPWebClient.Controllers
             ChannelFactory<IMosaikGenerator> channelfactory = new ChannelFactory<IMosaikGenerator>(new BasicHttpBinding(), endPoin);
             IMosaikGenerator proxy = null;
 
+            bool generation = false;
+
             try
             {
                 proxy = channelfactory.CreateChannel();
 
-                proxy.mosaikGenerator((int)id, int.Parse(kachelPool), int.Parse(mosaPool), multi == "1", int.Parse(bestof));
+                generation = proxy.mosaikGenerator((int)id, int.Parse(kachelPool), int.Parse(mosaPool), multi == "1", int.Parse(bestof));
             }
             catch (Exception)
             {
                 channelfactory.Close();
+
+                generation = false;
             }
 
             channelfactory.Close();
 
-            return RedirectToAction("Details", "Pools", new { id = mosaPool });
+            return RedirectToAction("Details", "Pools", new { id = mosaPool, gen = generation });
         }
 
         /// <summary>

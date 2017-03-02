@@ -121,7 +121,7 @@ namespace ASPWebClient.Controllers
         /// </summary>
         /// <param name="id">Die ID des Pools</param>
         /// <returns>View</returns>
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, bool? generation = null)
         {
             if (id == null)
             {
@@ -131,6 +131,13 @@ namespace ASPWebClient.Controllers
             if (pools == null || pools.owner != User.Identity.Name)
             {
                 return HttpNotFound();
+            }
+
+            ViewBag.generation = 0;
+
+            if (generation!=null)
+            {
+                ViewBag.generation = generation == false ? 1 : 2;
             }
 
             var imagesSet = db.ImagesSet.Include(p => p.Pools).Where(k => k.PoolsId == pools.Id);
