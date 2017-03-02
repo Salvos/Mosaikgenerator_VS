@@ -7,111 +7,182 @@
 <h2>Bildersammlung: @Html.Raw(ViewBag.Poolname)</h2>
 </br>
 
-@using (Html.BeginForm("Details", "Pools", new { id = ViewBag.id }, FormMethod.Post, new { id = "file", enctype = "multipart/form-data"}))
-{
-    @Html.AntiForgeryToken()
+@section Scripts {
+    <script type="text/javascript">
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <div class="col-md-3">
-                <input type="file" name="files" id="file" multiple accept="image/jpeg, image/png" />
-            </div>
+        // We can attach the `fileselect` event to all file inputs on the page
+        $(document).on('change', ':file', function() {
+        var input = $(this),
+	        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+	        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
+        });
 
-            <div class="col-md-1">
-                <input type="submit" value="Hochladen" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+        // We can watch for our custom `fileselect` event like this
+        $(document).ready( function() {
+          $(':file').on('fileselect', function(event, numFiles, label) {
+
+	          var input = $(this).parents('.input-group').find(':text'),
+		          log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+	          if( input.length ) {
+		          input.val(log);
+	          } else {
+		          if( log ) alert(log);
+	          }
+
+          });
+        });
+    </script>
 }
 
-<hr />
-
-@{
-    if (ViewBag.isKachel)
+<div class="center-block" style="width: 550px; display: block; margin-right: auto; margin-left: auto;">
+    @using (Html.BeginForm("Details", "Pools", new { id = ViewBag.id }, FormMethod.Post, new { id = "file", enctype = "multipart/form-data", @class = "form-inline" }))
     {
-        Html.BeginForm("GenKacheln", null, new { id = ViewBag.id },  FormMethod.Post);
-                <div>
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <input type="hidden" name="id" value="@ViewBag.id" />
-                            <input type="color" name="color" value="#ff0000">
-                        </div>
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip; <input type="file" name="files" style="display: none;" multiple required>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Hochladen" class="btn btn-default" />
+        </div>
+    }
+</div>
+
+    <hr />
+
+    @{
+        if (ViewBag.isKachel)
+        {
+            <div class="center-block" style="width: 550px; display: block; margin-right: auto; margin-left: auto;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" data-target="#demo" style="cursor: pointer;">Kacheln erstellen <span class="glyphicon glyphicon-menu-down"></span></a>
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <label for="nois">Rauschen</label>
-                            <input id="nois" value="1" type="checkbox" name="nois">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-3">
-                            <input type="number" min="1" max="20" step="1" name="count" placeholder="Anzahl">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-1">
-                            <input type="submit" value="Erzeugen" class="btn btn-default" />
+                    <div id="demo" class="collapse">
+                        <div class="panel-body">
+                            @using (Html.BeginForm("GenKacheln", null, new { id = ViewBag.id }, FormMethod.Post))
+                            {
+                                <div class="form-group">
+                                    <label for="colorR">Roter Farbwert:</label>
+                                    <input type="number" class="form-control" id="colorR" name="colorR" value="255" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Rotanteil der Kacheln an">
+                                </div>
+                                <div class="form-group">
+                                    <label for="colorG">Grüner Farbwert:</label>
+                                    <input type="number" class="form-control" id="colorG" name="colorG" value="50" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Grünanteil der Kacheln an">
+                                </div>
+                                <div class="form-group">
+                                    <label for="colorB">Blauer Farbwert:</label>
+                                    <input type="number" class="form-control" id="colorB" name="colorB" value="30" min="0" max="255" step="1" data-toggle="tooltip" title="Gibt den max. Blauanteil der Kacheln an">
+                                </div>
+                                <div class="form-group">
+                                    <label for="count">Anzahl der Kacheln:</label>
+                                    <input type="number" class="form-control" id="count" name="count" value="1" min="1" max="100" step="1" data-toggle="tooltip" title="Gibt die Anzahl der zu erstellenden Kacheln an">
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="1" name="nois" data-toggle="tooltip" title="Wenn aktiviert dann ist die Kachel nicht einfarbig sondern variert in der Farbhelligkeit">Rauschen der Fraben</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-info" value="Erstellen">
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
-        Html.EndForm();
+            </div>
+        }
     }
-}
+    <!--
+            <div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <input type="hidden" name="id" value="@ViewBag.id" />
+                        <input type="color" name="color" value="#ff0000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label for="nois">Rauschen</label>
+                        <input id="nois" value="1" type="checkbox" name="nois">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <input type="number" min="1" max="20" step="1" name="count" placeholder="Anzahl">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-1">
+                        <input type="submit" value="Erzeugen" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+            --->
 
-<table class="table">
-    <tr>
-        <th>
-            Thumbnail
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.displayname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.width)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.heigth)
-        </th>
-        <th>
-        </th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                Thumbnail
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.displayname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.width)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.heigth)
+            </th>
+            <th>
+            </th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            <img src="@Url.Action("Thumbnail", new { image = item.Id, isKachel = ViewBag.isKachel})" alt="Bild nicht gefunden" height="50" width="50"/>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.displayname)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.width)px
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.heigth)px
-        </td>
-        <td>
-            <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Bearbeiten">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            </a>
-
-            <a href="@Url.Action("Download", "Images",  new { id = item.Id, isKachel = ViewBag.isKachel })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
-                <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
-            </a>
-
-            <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Löschen">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </a>
-            @{
-                if (!ViewBag.isKachel)
-                {
-                    <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
-                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Action("Thumbnail", new { image = item.Id, isKachel = ViewBag.isKachel})" alt="Bild nicht gefunden" height="50" width="50" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.displayname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.width)px
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.heigth)px
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Bearbeiten">
+                        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                     </a>
-                }
-            }
-        </td>
-    </tr>
-}
 
-</table>
+                    <a href="@Url.Action("Download", "Images",  new { id = item.Id, isKachel = ViewBag.isKachel })" class="btn btn-warning" data-toggle="tooltip" title="Downloaden">
+                        <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+                    </a>
+
+                    <a href="@Url.Action("Delete", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Löschen">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                    @{
+                        if (!ViewBag.isKachel)
+                        {
+                            <a href="@Url.Action("Mosaik", "Images",  new { id = item.Id })" class="btn btn-warning" data-toggle="tooltip" title="Mosaik generieren">
+                                <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                            </a>
+                        }
+                    }
+                </td>
+            </tr>
+                        }
+
+    </table>
